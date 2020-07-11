@@ -1,2 +1,9 @@
 flask
 python-dotenv
+
+pydicom
+pandas
+tqdm
+toml
+
+pyinstaller

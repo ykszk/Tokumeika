@@ -1,0 +1,21 @@
+{
+  "name": "tokumeika-manager",
+  "version": "0.1.0",
+  "description": "Tokumeika managing software",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/yk-szk/Tokumeika",
+  "keywords": [
+    "Electron"
+  ],
+  "author": "Yuki Suzuki",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^9.1.1"
+  },
+  "dependencies": {
+    "ps-tree": "^1.2.0"
+  }
+}

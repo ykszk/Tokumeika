@@ -1,0 +1,189 @@
+import io
+import zipfile
+from collections import defaultdict
+from pathlib import Path
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import json
+import pydicom
+import tqdm
+import toml
+
+
+def save_as_zip(contents, compresslevel, zip_filename=None, verbose=False):
+    '''
+    Args:
+        contents (iterable): Iterable object that returns (filename, content)
+        compresslevel (int): Compression level for zipping. Specify -1 for no compression.
+        zip_filename (str): Filename for zipped contents. If None, bytes is returned.
+    '''
+    compression = zipfile.ZIP_STORED if compresslevel < 0 else zipfile.ZIP_DEFLATED
+    with zipfile.ZipFile(zip_filename,
+                         'w',
+                         compression,
+                         compresslevel=compresslevel) as zf:
+        for filename, content in tqdm.tqdm(contents) if verbose else contents:
+            zf.writestr(filename, content)
+
+
+def dcm2bytes(dcm):
+    with io.BytesIO() as bio:
+        pydicom.dcmwrite(bio, dcm)
+        return bio.getvalue()
+
+
+def dcms2zip(filenames, dcms, compresslevel, zip_filename, verbose=False):
+    '''
+    Args:
+        compresslevel (int): Compression level for zipping. Specify -1 for no compression.
+        zip_filename (str): Filename for zipped contents. If None, bytes is returned.
+    '''
+    generator = zip(filenames, (dcm2bytes(dcm) for dcm in dcms))
+    return save_as_zip(generator, compresslevel, zip_filename, verbose)
+
+
+def tag2int(tag_str):
+    '''
+    Convert tag string into a tuple of ints
+    e.g. '0008,00010' -> (8,16)
+
+    Args:
+        tag_str (str): String representing dicom tag.
+    '''
+    tags = tag_str.split(',')
+    t1, t2 = int(tags[0], 16), int(tags[1], 16)
+    return t1, t2
+
+
+def tag2str(tag):
+    '''
+    Convert tag (tuple of ints) into string.
+    e.g. (8,16) -> '(0008,0010)'
+    '''
+    return '({:04X},{:04X})'.format(*tag)
+
+
+def compress_dups(d, k):
+    '''
+    Compress duplications.
+
+    Args:
+       d (dict): input dictionary
+       k (func): function that returns value
+    '''
+    compress = []
+    for key, rep_list in d.items():
+        first_value = None
+        for rep in rep_list:
+            old = k(rep)
+            if first_value is None:
+                first_value = old
+                continue
+
+            if first_value != old:
+                break
+
+        else:  # all equal
+            compress.append(key)
+
+    for key in compress:
+        d[key] = d[key][0][1]
+
+
+def compress_replace(replaces):
+    compress_dups(replaces, lambda r: r[1][0])
+
+
+def compress_remove(remove):
+    compress_dups(remove, lambda r: r[1])
+
+
+class DcmGenerator(object):
+    '''
+    Args:
+        replace_rules (list): list of tuples of (tag, new_value)
+        remove_rules (list): list of tags to remove
+    '''
+    def __init__(self, filenames, replace_rules, remove_rules):
+        self.filenames = filenames
+        self.length = len(filenames)
+        self.replace_rules = replace_rules
+        self.remove_rules = remove_rules
+        self.replace_history = defaultdict(list)
+        self.remove_history = defaultdict(list)
+        self._history = None
+        self._i = 0
+
+    def __len__(self):
+        return self.length
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._i == self.length:
+            raise StopIteration()
+
+        fn = self.filenames[self._i]
+        dcm = pydicom.dcmread(fn)
+        fn = Path(fn).name
+
+        for tag, new_value in self.replace_rules:
+            if tag in dcm:
+                old_value = str(dcm[tag].value)
+            else:
+                old_value = ''
+            dcm[tag].value = new_value
+            self.replace_history[tag2str(tag)].append(
+                (fn, (old_value, new_value)))
+
+        for tag in self.remove_rules:
+            if tag in dcm:
+                old_value = str(dcm[tag].value)
+                del dcm[tag]
+            else:
+                old_value = ''
+            self.remove_history[tag2str(tag)].append((fn, old_value))
+
+        self._i += 1
+        return dcm
+
+    def history(self):
+        if self._history is None:
+            compress_replace(self.replace_history)
+            compress_remove(self.remove_history)
+            self._history = {
+                'replace': self.replace_history,
+                'remove': self.remove_history
+            }
+
+        return self._history
+
+
+def write_json(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
+def read_json(filename):
+    with open(filename, encoding='utf-8') as f:
+        return json.load(f)
+
+
+def now(format='%Y/%m/%d %H:%M:%S'):
+    '''
+    Return current datetime in str
+    '''
+    return datetime.today().strftime(format)
+
+
+def calc_age(data):
+    age_tag = '(0010,1010)'
+    if age_tag in data['remove'] and data['remove'][age_tag] != '':
+        return data['remove'][age_tag]
+    birth_date = data['remove']['(0010,0030)']
+    birth_date = datetime.strptime(birth_date, '%Y%m%d')
+    study_date = data['remove']['(0008,0020)']
+    study_date = datetime.strptime(study_date, '%Y%m%d')
+    age = relativedelta(study_date, birth_date).years
+    return str(age) + 'Y'
