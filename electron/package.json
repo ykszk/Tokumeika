@@ -1,6 +1,6 @@
 {
   "name": "tokumeika-manager",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Tokumeika managing software",
   "main": "main.js",
   "scripts": {
