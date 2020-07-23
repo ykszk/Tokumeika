@@ -45,18 +45,9 @@ jobs:
     - name: Build Electron
       run: |
         yarn build-electron
-    - name: Move files
+    - name: Package files
       run: |
         python package.py
-    - name: Uplaod package
-      uses: actions/upload-artifact@v1
-      with:
-        name: tokumeika-manager-win32-x64
-        path: electron/build/tokumeika-manager-win32-x64
-    - name: Download package
-      uses: actions/download-artifact@v2
-      with:
-        name: tokumeika-manager-win32-x64
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
