@@ -29,10 +29,20 @@ jobs:
     - name: Install node dependencies
       run: |
         yarn
-        cd electron && yarn && yarn add electron-packager
-    - name: Run packaging script
+        cd electron && yarn
+        yarn global add electron-packager
+    - name: Build React
       run: |
-        yarn package
+        yarn build
+    - name: Build python
+      run: |
+        yarn build-python
+    - name: Build Electron
+      run: |
+        yarn build-electron
+    - name: Move files
+      run: |
+        python package.py
     - name: Uplaod package
       uses: actions/upload-artifact@v1
       with:
