@@ -3,7 +3,7 @@
 ## 1. Build python api server
 In `api` directory.
 ```sh
-pyinstaller api_server.spec
+pyinstaller -y api_server.spec
 ```
 `dist` directory is created.
 

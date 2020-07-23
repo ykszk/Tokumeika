@@ -23,7 +23,10 @@
     "start-api": "cd api/api && flask run --no-debugger",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-python": "cd api && pyinstaller api_server.spec",
+    "build-electron": "cd electron && electron-packager . tokumeika-manager --out build --platform=win32 arch=x64 --electron-version=v9.1.1 --overwrite",
+    "package": "yarn build && yarn build-python && yarn build-electron && python package.py"
   },
   "eslintConfig": {
     "extends": "react-app"
