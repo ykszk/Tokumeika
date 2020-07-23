@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Typography } from '@material-ui/core';
 import * as Dcm from './Dcm';
 import { AnonCheckList } from './CheckList';
 import { AnonCheckNames } from './CheckNames';
