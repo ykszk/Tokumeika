@@ -80,7 +80,7 @@ const createMainWindow = () => {
     height: 720,
     resizeable: true,
     webPreferences: {
-      // devTools: true,
+      devTools: false,
       nodeIntegration: false,
       contextIsolation: true,
       preload: preload
@@ -90,7 +90,7 @@ const createMainWindow = () => {
   const url = `http://localhost:${port}/index.html`;
   console.log(url);
   mainWindow.loadURL(url);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.on("closed", function () {
     // Dereference the mainWindow object
     mainWindow = null;
