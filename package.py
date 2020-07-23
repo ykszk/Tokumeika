@@ -16,6 +16,12 @@ electron_dir = os.path.join('electron', 'build', electron_app_name)
 
 dst = electron_dir
 
+print('Move python build.')
 shutil.move(python_dir, dst)
+print('Move react build.')
 shutil.move(react_dir, os.path.join(dst, 'dist'))
+print('Copy config files.')
 shutil.copytree(config_dir, os.path.join(dst, 'config'))
+
+print('Zip package')
+shutil.make_archive(electron_app_name, 'zip', dst)
