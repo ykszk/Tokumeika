@@ -3,6 +3,22 @@
 
 DICOM de-identification and management tool.
 
+<table>
+  <thead><tr>
+    <td>Anonymize</td><td>Browse</td>
+  </tr></thead>
+  <tbody><tr>
+    <td><img src="img/screenshot_anonymize.png" /></td><td><img src="img/screenshot_browse.png" /></td>
+  </tr></tbody>
+  <thead><tr>
+    <td>Dialog</td><td>Export</td>
+    </td>
+  </tr></thead>
+  <tbody><tr>
+    <td><img src="img/screenshot_dialog.png" /></td><td><img src="img/screenshot_export.png" /></td>
+  </tr></tbody>
+</table>
+
 ## Flowchart
 [Original DICOM] --(De-identification)-> [Anonymous DICOM + private data] --(Export)-> [Anonymous DICOM + anonymous data]
 
