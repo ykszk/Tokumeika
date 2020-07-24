@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>匿名化 &mdash; Tokumeika  ドキュメント</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="エクスポート" href="export.html" />
+    <link rel="prev" title="セットアップ" href="setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Tokumeika
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">セットアップ</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">匿名化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">起動</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">フォルダの指定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">匿名化するデータの確認</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">追加情報の付加</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">匿名化処理の実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">結果の確認・修正</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">エクスポート</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">フォルダ構造</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Tokumeika</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>匿名化</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>匿名化<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="id2">
+<h2>起動<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tokumeika-manager.exe</span></code> をダブルクリックしてアプリを起動する。</p>
+<div class="figure align-default">
+<img alt="_images/app_folder.jpg" src="_images/app_folder.jpg" />
+</div>
+</div>
+<div class="section" id="id3">
+<h2>フォルダの指定<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>アプリを起動すると匿名化処理用の画面が開くので、匿名化するDICOMが入っているフォルダを選択する。</p>
+<div class="figure align-default" id="id8">
+<img alt="_images/list_dicom1.jpg" src="_images/list_dicom1.jpg" />
+<p class="caption"><span class="caption-text">フォルダのアイコンをクリックしてフォルダ選択のダイアログを起動する。</span><a class="headerlink" href="#id8" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id9">
+<img alt="_images/list_dicom2.jpg" src="_images/list_dicom2.jpg" />
+<p class="caption"><span class="caption-text">フォルダ選択のダイアログを使って匿名化する <strong>シリーズ</strong> が入っているフォルダを選択。</span><a class="headerlink" href="#id9" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id10">
+<img alt="_images/list_dicom3.jpg" src="_images/list_dicom3.jpg" />
+<p class="caption"><span class="caption-text">フォルダを選択したら <span class="guilabel">LIST DICOM</span> ボタンをクリックする。環境によってはボタンをクリックした後に少し待つ必要がある。</span><a class="headerlink" href="#id10" title="この画像へのパーマリンク">¶</a></p>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>匿名化するデータの確認<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>選択したフォルダに入っているDICOM画像の情報が表で表示される。
+フォルダを上手く選択できていれば、1行だけの表が表示されるのでそのまま <span class="guilabel">PROCEED</span> をクリックして次に進む。
+複数行表示されている場合は、処理をするシリーズだけにチェックをつけて  <span class="guilabel">PROCEED</span> をクリックして次に進む。</p>
+<div class="figure align-default" id="id11">
+<img alt="_images/choose_series.jpg" src="_images/choose_series.jpg" />
+<p class="caption"><span class="caption-text">通常、1行だけの表が表示される。</span><a class="headerlink" href="#id11" title="この画像へのパーマリンク">¶</a></p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>追加情報の付加<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>骨折箇所等の追加情報を付加する。</p>
+<div class="figure align-default" id="id12">
+<img alt="_images/add_meta1.jpg" src="_images/add_meta1.jpg" />
+<p class="caption"><span class="caption-text">アイコンをクリックしてダイアログを起動する。</span><a class="headerlink" href="#id12" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id13">
+<img alt="_images/add_meta2.jpg" src="_images/add_meta2.jpg" />
+<p class="caption"><span class="caption-text">該当するアイコンをクリックして追加情報を付加する。</span><a class="headerlink" href="#id13" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id14">
+<img alt="_images/add_meta3.jpg" src="_images/add_meta3.jpg" />
+<p class="caption"><span class="caption-text">表に追加されているデータが正しいことを確認して <span class="guilabel">PROCEED</span></span><a class="headerlink" href="#id14" title="この画像へのパーマリンク">¶</a></p>
+</div>
+</div>
+<div class="section" id="id6">
+<h2>匿名化処理の実行<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><span class="guilabel">EXECUTE</span> ボタンをクリックして匿名化処理を実行する。</p>
+<div class="figure align-default" id="id15">
+<img alt="_images/exec1.jpg" src="_images/exec1.jpg" />
+<p class="caption"><span class="caption-text"><span class="guilabel">EXECUTE</span> ボタンをクリック</span><a class="headerlink" href="#id15" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id16">
+<img alt="_images/exec2.jpg" src="_images/exec2.jpg" />
+<p class="caption"><span class="caption-text">StatusがDoneになれば完了</span><a class="headerlink" href="#id16" title="この画像へのパーマリンク">¶</a></p>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>結果の確認・修正<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>画面右上の <span class="guilabel">BROWSE</span> をクリックすると、今まで匿名化したデータを確認できる。</p>
+<div class="figure align-default" id="id17">
+<img alt="_images/browse.jpg" src="_images/browse.jpg" />
+<p class="caption"><span class="caption-text">付加情報が間違っている場合はこの画面で変更できる。</span><a class="headerlink" href="#id17" title="この画像へのパーマリンク">¶</a></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="export.html" class="btn btn-neutral float-right" title="エクスポート" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="setup.html" class="btn btn-neutral float-left" title="セットアップ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; 著作権 2020, Yuki Suzuki
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
