@@ -1,13 +1,13 @@
 remove = [
-  "0008,0020", # Study Date
-  "0008,0023", # Content Date
-  "0008,0030", # Study Time
-  "0008,0033", # Content Time
-  "0008,0090", # Referring Physician's Name
-  "0010,0030", # Patient's Birth Date
-  "0010,1010", # Patient's Age
-  "0020,0010", # Study ID
-  "0020,0011", # Series Number
+  '0008,0020', # Study Date
+  '0008,0023', # Content Date
+  '0008,0030', # Study Time
+  '0008,0033', # Content Time
+  '0008,0090', # Referring Physician's Name
+  '0010,0030', # Patient's Birth Date
+  '0010,1010', # Patient's Age
+  '0020,0010', # Study ID
+  '0020,0011', # Series Number
 ]
 replace = [
   
