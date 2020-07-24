@@ -49,7 +49,7 @@
     "prettier": "^2.0.5"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{ts,tsx,js,jsx}": [
       "prettier --write"
     ],
     "*.py": [
