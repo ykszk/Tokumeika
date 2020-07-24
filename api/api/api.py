@@ -5,7 +5,6 @@ import sys
 import copy
 import json
 import time
-from functools import lru_cache
 import shutil
 import tqdm
 import toml
@@ -138,7 +137,6 @@ def aggregate_dcms(filenames, dcms):
     return patients
 
 
-@lru_cache(32)
 def _load_dcms(indir):
     logger.info('load:' + indir)
     indir = Path(indir)
@@ -163,13 +161,6 @@ def exists():
     path = request.args.get('path')
     t = 'directory' if os.path.isdir(path) else 'file'
     return {'exists': os.path.exists(path), 'type': t}
-
-
-@app.route('/clear_cache', methods=['GET'])
-def clear_cache():
-    logger.debug('clear_cache')
-    _load_dcms.cache_clear()
-    return {'success': True}
 
 
 @app.route('/dcmlist', methods=['GET'])
