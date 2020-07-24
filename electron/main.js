@@ -44,8 +44,12 @@ const startPythonSubprocess = () => {
     ['-p', port, '-s', static_dir, '-c', config_dir],
     (error, stdout, stderr) => {
       if (error) {
-        dialog.showErrorBox('Python error', stderr);
-        mainWindow.close();
+        if (mainWindow === null) {
+          console.log(stderr);
+        } else {
+          dialog.showErrorBox('Python error', stderr);
+          mainWindow.close();
+        }
       }
     },
   );
