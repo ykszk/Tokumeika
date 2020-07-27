@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function cloneMetaData(meta: MetaType) {
+export function cloneMetaData(meta: MetaType) {
   return { items: new Set(meta.items), note: meta.note };
 }
 
@@ -39,7 +39,7 @@ export function MetaDialog(props: {
   iniMetaState: MetaType;
   metaNameMap: Map<string, string>;
 }) {
-  const { title, handleData, iniMetaState, metaNameMap } = props;
+  let { title, handleData, iniMetaState, metaNameMap } = props;
   const classes = useStyles();
   const [openDialog, setDialogOpen] = useState(false);
 
@@ -51,7 +51,7 @@ export function MetaDialog(props: {
     setDialogOpen(true);
   };
   const handleClose = () => {
-    setMeta(Object.assign({}, iniMetaState));
+    setMeta(cloneMetaData(iniMetaState));
     setDialogOpen(false);
   };
   const handleOK = () => {
@@ -85,7 +85,7 @@ export function MetaDialog(props: {
     } else {
       meta.items.add(id);
     }
-    setMeta(Object.assign({}, meta));
+    setMeta(cloneMetaData(meta));
   }
 
   function onTextChange(event: React.ChangeEvent<HTMLInputElement>) {

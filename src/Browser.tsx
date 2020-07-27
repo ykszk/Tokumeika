@@ -4,7 +4,7 @@ import { Table, TableBody, TableHead, Chip, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { MetaType } from './anonymizer/Dcm';
-import { MetaDialog } from './anonymizer/MetaDialog';
+import { MetaDialog, cloneMetaData } from './anonymizer/MetaDialog';
 
 interface PatientType {
   PatientID: string;
@@ -84,7 +84,7 @@ export function Browser() {
       console.log('Meta data not changed.');
       return;
     }
-    data[data_index].meta = meta;
+    data[data_index].meta = cloneMetaData(meta);
     setData(data.slice());
     const pid = data[data_index].anonymized.PatientID;
     const suid = data[data_index].SeriesInstanceUID;
