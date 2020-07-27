@@ -88,8 +88,15 @@
 <li class="toctree-l1"><a class="reference internal" href="anonymize.html">匿名化</a></li>
 <li class="toctree-l1"><a class="reference internal" href="export.html">エクスポート</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">フォルダ構造</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data"><code class="docutils literal notranslate"><span class="pre">data</span></code> フォルダ</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#export"><code class="docutils literal notranslate"><span class="pre">export</span></code> フォルダ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">アプリの内部データ用フォルダ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dicom"><code class="docutils literal notranslate"><span class="pre">dicom</span></code> フォルダ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#private"><code class="docutils literal notranslate"><span class="pre">private</span></code> フォルダ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">出力用フォルダ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#export"><code class="docutils literal notranslate"><span class="pre">export</span></code> フォルダ</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -157,17 +164,28 @@
             
   <div class="section" id="id1">
 <h1>フォルダ構造<a class="headerlink" href="#id1" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<div class="section" id="data">
-<h2><code class="docutils literal notranslate"><span class="pre">data</span></code> フォルダ<a class="headerlink" href="#data" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>デフォルトの設定では、匿名化したデータはアプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">data</span></code> 内に保存される。
-<strong>このフォルダには個人情報が保存されている。</strong>
-<code class="docutils literal notranslate"><span class="pre">data/PatientID/</span></code> に患者ごとのデータが保存される。ファイル名はseries instance UID。<code class="docutils literal notranslate"><span class="pre">zip</span></code> ファイルには匿名化したDICOMファイルが入っている。 <code class="docutils literal notranslate"><span class="pre">json</span></code> ファイルにはDICOMから削除された検査データや追加された付加情報が保存されている。</p>
+<div class="section" id="id2">
+<h2>アプリの内部データ用フォルダ<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>アプリが管理するデータを保存するためのフォルダ。アプリが管理するため、手動でファイルを操作する必要はない。</p>
+<div class="section" id="dicom">
+<h3><code class="docutils literal notranslate"><span class="pre">dicom</span></code> フォルダ<a class="headerlink" href="#dicom" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>匿名化したDICOM画像を保存するフォルダ。デフォルトの設定ではアプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">dicom</span></code>。
+<code class="docutils literal notranslate"><span class="pre">dicom/PatientID/</span></code> に患者ごとのデータが保存される。ファイル名はseries instance UID。</p>
 </div>
+<div class="section" id="private">
+<h3><code class="docutils literal notranslate"><span class="pre">private</span></code> フォルダ<a class="headerlink" href="#private" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>DICOM画像を匿名化した際に削除されたデータを保存するフォルダ。 <strong>このフォルダには個人情報が保存されている。</strong> デフォルトの設定では、アプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">private</span></code>。<code class="docutils literal notranslate"><span class="pre">private/PatientID/</span></code> に患者ごとのデータが保存される。ファイル名はseries instance UID。</p>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>出力用フォルダ<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>アプリのデータを保存するためのフォルダ。</p>
 <div class="section" id="export">
-<h2><code class="docutils literal notranslate"><span class="pre">export</span></code> フォルダ<a class="headerlink" href="#export" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>デフォルトの設定では、エクスポートしたデータはアプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">export</span></code> 内に保存される。
+<h3><code class="docutils literal notranslate"><span class="pre">export</span></code> フォルダ<a class="headerlink" href="#export" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>デフォルトの設定では、アプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">export</span></code> 。
 <strong>このフォルダには個人情報は含まれていない。</strong>
 <code class="docutils literal notranslate"><span class="pre">export/PatientID/</span></code> に患者ごとのデータが保存される。 <code class="docutils literal notranslate"><span class="pre">zip</span></code> はDICOMデータ。 <code class="docutils literal notranslate"><span class="pre">json</span></code> は個人情報が含まれていない情報が保存されている。</p>
+</div>
 </div>
 </div>
 
