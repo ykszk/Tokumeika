@@ -3,8 +3,15 @@ frontal_bone,‘O“ª
 nasal_bone,•@
 ethmoid_bone,•@βΏ
 mandible,‰Ί{
+right_zmc,‰E–ji–jγ{•΅‡‘Μj
+left_zmc,¶–ji–jγ{•΅‡‘Μj
 right_zygomatic_arch,‰E–j‹|
 left_zygomatic_arch,¶–j‹|
-maxilla,γ{
-orbital_floor,αβ|’κ
-orbital medial floor,αβ|“ΰ‘¤•Η
+right_maxilla,‰Eγ{
+left_maxilla,¶γ{
+right_orbital_floor,‰Eαβ|’κ
+left_orbital_floor,¶αβ|’κ
+right_orbital_medial_floor,‰Eαβ|“ΰ‘¤•Η
+left_orbital_medial_floor,¶αβ|“ΰ‘¤•Η
+right_mandible,‰E‰Ί{
+left_mandible,¶‰Ί{
