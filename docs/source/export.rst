@@ -7,7 +7,7 @@
 実行
 ------------
 画面右上の :guilabel:`EXPORT` をクリックしてエクスポート用の画面に切り替える。
-エクスポートしたいデータにチェックを要れて :guilabel:`EXPORT` ボタンをクリックする。
+エクスポートしたいデータにチェックを入れて :guilabel:`EXPORT` ボタンをクリックする。
 
 .. figure:: images/export1.jpg
 
