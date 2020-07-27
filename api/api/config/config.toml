@@ -1,3 +1,4 @@
-data = 'data'
+dicom = 'dicom'
+private = 'private'
 export = 'export'
 prefix = 'ANON'

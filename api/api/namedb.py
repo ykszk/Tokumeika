@@ -14,8 +14,8 @@ MAX_ID_LENGTH = 8
 
 
 class NameDB(object):
-    def __init__(self, datadir, prefix):
-        self.datadir = datadir
+    def __init__(self, private_dir, prefix):
+        self.private_dir = private_dir
         self.prefix = prefix
 
         self.name_dict = {}
@@ -27,7 +27,7 @@ class NameDB(object):
     def reload(self):
         logger.info('reload namedb')
         pid_tag = '(0010,0020)'
-        root = Path(self.datadir)
+        root = Path(self.private_dir)
         for fn in root.glob('**/*.json'):
             data = utils.read_json(fn)
             if 'replace' not in data.keys():

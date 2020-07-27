@@ -38,16 +38,18 @@ if len(config['prefix']) >= namedb.MAX_ID_LENGTH - 2:
     logger.fatal('prefix too long:' + config['prefix'])
     sys.exit(1)
 
-db = namedb.NameDB(config['data'], config['prefix'])
+db = namedb.NameDB(config['private'], config['prefix'])
 
-datadir = Path(config['data'])
-datadir.mkdir(parents=True, exist_ok=True)
+dicom_dir = Path(config['dicom'])
+dicom_dir.mkdir(parents=True, exist_ok=True)
+private_dir = Path(config['private'])
+private_dir.mkdir(parents=True, exist_ok=True)
 exportdir = Path(config['export'])
 exportdir.mkdir(parents=True, exist_ok=True)
 
 
 def build_history_db():
-    for fn in datadir.glob('**/*.json'):
+    for fn in private_dir.glob('**/*.json'):
         data = utils.read_json(fn)
         history_db[fn.stem] = data
 
@@ -197,12 +199,14 @@ def _register(filenames, meta):
         stem = str(dcm[SUID_TAG].value)
     else:
         stem = str(time.time())
-    outdir = Path(config['data']) / new_name
-    outdir.mkdir(parents=True, exist_ok=True)
+    dicom_outdir = dicom_dir / new_name
+    dicom_outdir.mkdir(parents=True, exist_ok=True)
+    private_outdir = private_dir / new_name
+    private_outdir.mkdir(parents=True, exist_ok=True)
     utils.dcms2zip([Path(fn).name for fn in filenames],
                    dcm_generator,
                    1,
-                   outdir / (stem + '.zip'),
+                   dicom_outdir / (stem + '.zip'),
                    verbose=True)
     history = dcm_generator.history()
     history['registration_datetime'] = utils.now()
@@ -214,7 +218,7 @@ def _register(filenames, meta):
         logger.warning('Calculating age failed:' + str(e))
         age = -1
     history['age'] = str(age)
-    utils.write_json(outdir / (stem + '.json'), history)
+    utils.write_json(private_outdir / (stem + '.json'), history)
     db.add(pid, new_name)
 
 
@@ -236,7 +240,7 @@ def register():
 @app.route('/update/<pid>/<suid>', methods=['PUT'])
 def update(pid, suid):
     try:
-        filename = datadir / pid / (suid + '.json')
+        filename = private_dir / pid / (suid + '.json')
         data = utils.read_json(filename)
         data['meta'] = request.json
         data['last_update'] = utils.now()
@@ -251,8 +255,8 @@ def update(pid, suid):
 @app.route('/export/<pid>/<suid>', methods=['GET'])
 def export(pid, suid):
     try:
-        json_filename = datadir / pid / (suid + '.json')
-        dcm_filename = datadir / pid / (suid + '.zip')
+        json_filename = private_dir / pid / (suid + '.json')
+        dcm_filename = dicom_dir / pid / (suid + '.zip')
         dst = exportdir / pid
         dst.mkdir(parents=True, exist_ok=True)
         data = utils.read_json(json_filename)
