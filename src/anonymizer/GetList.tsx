@@ -29,6 +29,7 @@ export function AnonGetList(props: {
   const [errMessage, setErrMessage] = useState('');
 
   function get_list() {
+    setButtonDisabled(true);
     fetch('dcmlist?path=' + encodeURIComponent(dcmRoot))
       .then((res) => res.json())
       .then((data) => {
@@ -71,6 +72,7 @@ export function AnonGetList(props: {
 
   const [dcmRoot, setDcmRoot] = useState('');
   const [pathExists, setPathExists] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
     if (dcmRoot === '') {
@@ -110,7 +112,7 @@ export function AnonGetList(props: {
         <Button
           variant="contained"
           onClick={() => get_list()}
-          disabled={!pathExists}
+          disabled={!pathExists || buttonDisabled}
         >
           List DICOM
         </Button>
