@@ -140,7 +140,7 @@ export function Exporter() {
     }
     recursive_fetch(0);
   }
-  const [sortBy, setSortBy] = useState('anonymized_pid');
+  const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = React.useState<Order>('asc');
 
   const handleRequestSort = (sortable: SortableType<EntryType>) => {

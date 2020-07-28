@@ -146,7 +146,7 @@ export function Browser() {
       });
   }
 
-  const [sortBy, setSortBy] = useState('anonymized_pid');
+  const [sortBy, setSortBy] = useState('');
   const [order, setOrder] = React.useState<Order>('asc');
 
   const handleRequestSort = (sortable: SortableType<EntryType>) => {
