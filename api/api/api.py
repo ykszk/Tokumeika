@@ -300,11 +300,13 @@ def query():
 
 @app.route('/rebuild_db', methods=['GET'])
 def rebuild_db():
+    start = time.time()
     try:
         history_db.clear()
         build_history_db()
     except Exception as e:
         return {'success': False, 'result': str(e)}
+    logger.info('reload_db took {}'.format(time.time() - start))
     return {'success': True}
 
 
