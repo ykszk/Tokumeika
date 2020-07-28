@@ -65,12 +65,19 @@ const sortables: SortableType<EntryType>[] = [
     id: 'registration',
     label: 'Registration',
     comparator: (a, b) =>
-      descendingComparator(a.registration_datetime, b.registration_datetime),
+      descendingComparator(
+        Date.parse(a.registration_datetime),
+        Date.parse(b.registration_datetime),
+      ),
   },
   {
     id: 'update',
     label: 'Update',
-    comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
+    comparator: (a, b) =>
+      descendingComparator(
+        Date.parse(a.last_update),
+        Date.parse(b.last_update),
+      ),
   },
 ];
 

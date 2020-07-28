@@ -60,14 +60,18 @@ const sortables: SortableType<EntryType>[] = [
   {
     id: 'update',
     label: 'Update',
-    comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
+    comparator: (a, b) =>
+      descendingComparator(
+        Date.parse(a.last_update),
+        Date.parse(b.last_update),
+      ),
   },
   {
     id: 'last_export',
     label: 'Last Export',
     comparator: (a, b) => {
-      const ale = a.last_export ? a.last_export : '';
-      const ble = b.last_export ? b.last_export : '';
+      const ale = a.last_export ? Date.parse(a.last_export) : 0;
+      const ble = b.last_export ? Date.parse(b.last_export) : 0;
       return descendingComparator(ale, ble);
     },
   },
