@@ -6,7 +6,7 @@ import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { MetaType } from './anonymizer/Dcm';
 import { MetaDialog, cloneMetaData } from './anonymizer/MetaDialog';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-
+import { SortableType, Order, descendingComparator } from './SortableTable';
 interface PatientType {
   PatientID: string;
 }
@@ -35,19 +35,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function descendingComparator<T>(a: T, b: T) {
-  if (a === b) return 0;
-  return b < a ? -1 : 1;
-}
-
-type Order = 'asc' | 'desc';
-
-interface SortableType {
-  id: string;
-  label: string;
-  comparator: (a: EntryType, b: EntryType) => number;
-}
-
 function eqSet<T>(a: Set<T>, b: Set<T>) {
   if (a.size !== b.size) return false;
   for (const item of Array.from(a)) {
@@ -55,6 +42,37 @@ function eqSet<T>(a: Set<T>, b: Set<T>) {
   }
   return true;
 }
+
+const sortables: SortableType<EntryType>[] = [
+  {
+    id: 'original_pid',
+    label: 'Original Patient ID',
+    comparator: (a, b) =>
+      descendingComparator(a.original.PatientID, b.original.PatientID),
+  },
+  {
+    id: 'anonymized_pid',
+    label: 'Anonymized Patient ID',
+    comparator: (a, b) =>
+      descendingComparator(a.anonymized.PatientID, b.anonymized.PatientID),
+  },
+  {
+    id: 'age',
+    label: 'Age',
+    comparator: (a, b) => descendingComparator(a.age, b.age),
+  },
+  {
+    id: 'registration',
+    label: 'Registration',
+    comparator: (a, b) =>
+      descendingComparator(a.registration_datetime, b.registration_datetime),
+  },
+  {
+    id: 'update',
+    label: 'Update',
+    comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
+  },
+];
 
 export function Browser() {
   const [data, setData] = useState(Array<EntryType>());
@@ -128,41 +146,10 @@ export function Browser() {
       });
   }
 
-  const sortables: SortableType[] = [
-    {
-      id: 'original_pid',
-      label: 'Original Patient ID',
-      comparator: (a, b) =>
-        descendingComparator(a.original.PatientID, b.original.PatientID),
-    },
-    {
-      id: 'anonymized_pid',
-      label: 'Anonymized Patient ID',
-      comparator: (a, b) =>
-        descendingComparator(a.anonymized.PatientID, b.anonymized.PatientID),
-    },
-    {
-      id: 'age',
-      label: 'Age',
-      comparator: (a, b) => descendingComparator(a.age, b.age),
-    },
-    {
-      id: 'registration',
-      label: 'Registration',
-      comparator: (a, b) =>
-        descendingComparator(a.registration_datetime, b.registration_datetime),
-    },
-    {
-      id: 'update',
-      label: 'Update',
-      comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
-    },
-  ];
-
   const [sortBy, setSortBy] = useState('anonymized_pid');
   const [order, setOrder] = React.useState<Order>('asc');
 
-  const handleRequestSort = (sortable: SortableType) => {
+  const handleRequestSort = (sortable: SortableType<EntryType>) => {
     const id = sortable.id;
     const isAsc = sortBy === id && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -174,7 +161,7 @@ export function Browser() {
     }
     setData(data.slice());
   };
-  function createSortHandler(sortable: SortableType) {
+  function createSortHandler(sortable: SortableType<EntryType>) {
     return (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       return handleRequestSort(sortable);
     };
