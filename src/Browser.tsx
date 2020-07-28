@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { MetaType } from './anonymizer/Dcm';
 import { MetaDialog, cloneMetaData } from './anonymizer/MetaDialog';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 interface PatientType {
   PatientID: string;
@@ -34,7 +35,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type DataType = EntryType[];
+function descendingComparator<T>(a: T, b: T) {
+  if (a === b) return 0;
+  return b < a ? -1 : 1;
+}
+
+type Order = 'asc' | 'desc';
+
+interface SortableType {
+  id: string;
+  label: string;
+  comparator: (a: EntryType, b: EntryType) => number;
+}
 
 function eqSet<T>(a: Set<T>, b: Set<T>) {
   if (a.size !== b.size) return false;
@@ -116,6 +128,58 @@ export function Browser() {
       });
   }
 
+  const sortables: SortableType[] = [
+    {
+      id: 'original_pid',
+      label: 'Original Patient ID',
+      comparator: (a, b) =>
+        descendingComparator(a.original.PatientID, b.original.PatientID),
+    },
+    {
+      id: 'anonymized_pid',
+      label: 'Anonymized Patient ID',
+      comparator: (a, b) =>
+        descendingComparator(a.anonymized.PatientID, b.anonymized.PatientID),
+    },
+    {
+      id: 'age',
+      label: 'Age',
+      comparator: (a, b) => descendingComparator(a.age, b.age),
+    },
+    {
+      id: 'registration',
+      label: 'Registration',
+      comparator: (a, b) =>
+        descendingComparator(a.registration_datetime, b.registration_datetime),
+    },
+    {
+      id: 'update',
+      label: 'Update',
+      comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
+    },
+  ];
+
+  const [sortBy, setSortBy] = useState('anonymized_pid');
+  const [order, setOrder] = React.useState<Order>('asc');
+
+  const handleRequestSort = (sortable: SortableType) => {
+    const id = sortable.id;
+    const isAsc = sortBy === id && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setSortBy(id);
+    if (isAsc) {
+      data.sort((a, b) => sortable.comparator(a, b));
+    } else {
+      data.sort((a, b) => -sortable.comparator(a, b));
+    }
+    setData(data.slice());
+  };
+  function createSortHandler(sortable: SortableType) {
+    return (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      return handleRequestSort(sortable);
+    };
+  }
+
   const rows = data.map((e, data_index) => (
     <React.Fragment key={e.SeriesInstanceUID}>
       <StyledTableRow>
@@ -155,15 +219,27 @@ export function Browser() {
       </StyledTableRow>
     </React.Fragment>
   ));
+  const sortableHeaders = sortables.map((sortable) => {
+    return (
+      <StyledTableCell
+        key={sortable.id}
+        sortDirection={sortBy === sortable.id ? order : false}
+      >
+        <TableSortLabel
+          active={sortBy === sortable.id}
+          direction={sortBy === sortable.id ? order : 'asc'}
+          onClick={createSortHandler(sortable)}
+        >
+          {sortable.label}
+        </TableSortLabel>
+      </StyledTableCell>
+    );
+  });
   return (
     <Table size="small">
       <TableHead>
         <StyledTableRow>
-          <StyledTableCell>Original Patient ID</StyledTableCell>
-          <StyledTableCell>Anonymized Patient ID</StyledTableCell>
-          <StyledTableCell>Age</StyledTableCell>
-          <StyledTableCell>Registration</StyledTableCell>
-          <StyledTableCell>Update</StyledTableCell>
+          {sortableHeaders}
           <StyledTableCell>Additional data</StyledTableCell>
           <StyledTableCell>Edit</StyledTableCell>
         </StyledTableRow>
