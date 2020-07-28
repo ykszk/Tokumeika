@@ -13,9 +13,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { EntryType } from './Browser';
-interface PatientType {
-  PatientID: string;
-}
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import { SortableType, Order, descendingComparator } from './SortableTable';
 
 interface ItemType {
   id: string;
@@ -38,6 +37,41 @@ function need_export(e: EntryType) {
   const last_update = Date.parse(e.last_update);
   return last_export < last_update;
 }
+
+const sortables: SortableType<EntryType>[] = [
+  {
+    id: 'original_pid',
+    label: 'Original Patient ID',
+    comparator: (a, b) =>
+      descendingComparator(a.original.PatientID, b.original.PatientID),
+  },
+  {
+    id: 'anonymized_pid',
+    label: 'Anonymized Patient ID',
+    comparator: (a, b) =>
+      descendingComparator(a.anonymized.PatientID, b.anonymized.PatientID),
+  },
+  {
+    id: 'registration',
+    label: 'Registration',
+    comparator: (a, b) =>
+      descendingComparator(a.registration_datetime, b.registration_datetime),
+  },
+  {
+    id: 'update',
+    label: 'Update',
+    comparator: (a, b) => descendingComparator(a.last_update, b.last_update),
+  },
+  {
+    id: 'last_export',
+    label: 'Last Export',
+    comparator: (a, b) => {
+      const ale = a.last_export ? a.last_export : '';
+      const ble = b.last_export ? b.last_export : '';
+      return descendingComparator(ale, ble);
+    },
+  },
+];
 
 export function Exporter() {
   const [data, setData] = useState(Array<EntryType>());
@@ -106,6 +140,26 @@ export function Exporter() {
     }
     recursive_fetch(0);
   }
+  const [sortBy, setSortBy] = useState('anonymized_pid');
+  const [order, setOrder] = React.useState<Order>('asc');
+
+  const handleRequestSort = (sortable: SortableType<EntryType>) => {
+    const id = sortable.id;
+    const isAsc = sortBy === id && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setSortBy(id);
+    if (isAsc) {
+      data.sort((a, b) => sortable.comparator(a, b));
+    } else {
+      data.sort((a, b) => -sortable.comparator(a, b));
+    }
+    setData(data.slice());
+  };
+  function createSortHandler(sortable: SortableType<EntryType>) {
+    return (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      return handleRequestSort(sortable);
+    };
+  }
 
   const rows = data.map((e, data_index) => (
     <React.Fragment key={e.SeriesInstanceUID}>
@@ -153,16 +207,28 @@ export function Exporter() {
       </StyledTableRow>
     </React.Fragment>
   ));
+  const sortableHeaders = sortables.map((sortable) => {
+    return (
+      <StyledTableCell
+        key={sortable.id}
+        sortDirection={sortBy === sortable.id ? order : false}
+      >
+        <TableSortLabel
+          active={sortBy === sortable.id}
+          direction={sortBy === sortable.id ? order : 'asc'}
+          onClick={createSortHandler(sortable)}
+        >
+          {sortable.label}
+        </TableSortLabel>
+      </StyledTableCell>
+    );
+  });
   return (
     <Box className={classes.vspacing}>
       <Table size="small">
         <TableHead>
           <StyledTableRow>
-            <StyledTableCell>Original Patient ID</StyledTableCell>
-            <StyledTableCell>Anonymized Patient ID</StyledTableCell>
-            <StyledTableCell>Registration</StyledTableCell>
-            <StyledTableCell>Update</StyledTableCell>
-            <StyledTableCell>Last Export</StyledTableCell>
+            {sortableHeaders}
             <StyledTableCell>Additional data</StyledTableCell>
             <StyledTableCell>Export</StyledTableCell>
           </StyledTableRow>
