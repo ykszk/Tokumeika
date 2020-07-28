@@ -198,7 +198,13 @@ export function Browser() {
           <div className={classes.vspacing}>
             {Array.from(e.meta.items).map((id) => {
               return (
-                <Chip key={id} label={metaNameMap.get(id)} size="small"></Chip>
+                <Chip
+                  key={id}
+                  label={
+                    metaNameMap.get(id) ? metaNameMap.get(id) : `Unknown:${id}`
+                  }
+                  size="small"
+                ></Chip>
               );
             })}
             {e.meta.note === '' ? null : (

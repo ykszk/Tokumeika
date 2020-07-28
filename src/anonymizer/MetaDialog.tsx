@@ -75,6 +75,25 @@ export function MetaDialog(props: {
       </React.Fragment>,
     );
   });
+  // Add unknown ids if there's any.
+  meta.items.forEach((id) => {
+    if (!metaNameMap.has(id)) {
+      buttons.push(
+        <React.Fragment key={id}>
+          <Button
+            className={
+              meta.items.has(id) ? classes.selected : classes.notSelected
+            }
+            onClick={handleToggleButton}
+            variant="contained"
+            id={id}
+          >
+            {`Unknown:${id}`}
+          </Button>
+        </React.Fragment>,
+      );
+    }
+  });
 
   function handleToggleButton(
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
