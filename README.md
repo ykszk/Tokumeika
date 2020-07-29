@@ -19,8 +19,10 @@ DICOM de-identification and management tool.
   </tr></tbody>
 </table>
 
-## Flowchart
+## Workflow
+```
 [Original DICOM] --(De-identification)-> [Anonymous DICOM + private data] --(Export)-> [Anonymous DICOM + anonymous data]
+```
 
 ## Install
 Download latest version from the [releases](https://github.com/yk-szk/Tokumeika/releases) page.
