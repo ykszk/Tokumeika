@@ -39,7 +39,7 @@ export function MetaDialog(props: {
   iniMetaState: MetaType;
   metaNameMap: Map<string, string>;
 }) {
-  let { title, handleData, iniMetaState, metaNameMap } = props;
+  const { title, handleData, iniMetaState, metaNameMap } = props;
   const classes = useStyles();
   const [openDialog, setDialogOpen] = useState(false);
 

@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { AnonymizerState, AnonymizerMain } from './Anonymizer';
 import { StyledTableCell, StyledTableRow } from './StyledTable';
-import { MetaDialog } from './MetaDialog';
+import { MetaDialog, cloneMetaData } from './MetaDialog';
 import * as Dcm from './Dcm';
 
 type MetaType = Dcm.MetaType;
@@ -95,11 +95,9 @@ export function AnonCheckNames(props: {
   }, []);
 
   function handleMetaData(suid: string, meta: MetaType) {
-    metaMap.set(suid, meta);
+    metaMap.set(suid, cloneMetaData(meta));
     setMetaMap(new Map(metaMap));
   }
-
-  // const [seriesUid, setSeriesUid] = useState('');
 
   const table = (
     <Table size="small">
