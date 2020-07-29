@@ -88,8 +88,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">セットアップ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">ダウンロード</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id4">展開</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id5">初期設定</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">初回起動</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">初期設定</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id6">項目</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">初回起動</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="anonymize.html">匿名化</a></li>
@@ -163,9 +166,9 @@
 <div class="section" id="id2">
 <h2>ダウンロード<a class="headerlink" href="#id2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><a class="reference external" href="https://github.com/yk-szk/Tokumeika/releases">配布サイト</a> から最新版の <code class="docutils literal notranslate"><span class="pre">tokumeika-manager-win32-x64.zip</span></code> をダウンロードする</p>
-<div class="figure align-default" id="id7">
+<div class="figure align-default" id="id8">
 <img alt="_images/download.jpg" src="_images/download.jpg" />
-<p class="caption"><span class="caption-text">最新版をダウンロードする。</span><a class="headerlink" href="#id7" title="この画像へのパーマリンク">¶</a></p>
+<p class="caption"><span class="caption-text">最新版をダウンロードする。</span><a class="headerlink" href="#id8" title="この画像へのパーマリンク">¶</a></p>
 </div>
 </div>
 <div class="section" id="id4">
@@ -176,17 +179,32 @@
 <h2>初期設定<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>アプリと同じフォルダ内の <code class="docutils literal notranslate"><span class="pre">config/config.toml</span></code> を編集して初期設定を行う。
 <cite>prefix = 'ANON'</cite> を`prefix = 'OUH'` 等に変更する。</p>
-</div>
 <div class="section" id="id6">
-<h2>初回起動<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>初回起動時に画像のような画面が表示された場合は、<span class="guilabel">詳細情報→実行</span> をクリックしてアプリを許可する。</p>
-<div class="figure align-default" id="id8">
-<img alt="_images/smart_screen.jpg" src="_images/smart_screen.jpg" />
-<p class="caption"><span class="caption-text">初回起動時にアプリがブロックされる場合がある。</span><a class="headerlink" href="#id8" title="この画像へのパーマリンク">¶</a></p>
+<h3>項目<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="simple">
+<dt>prefix</dt><dd><p>匿名化後の患者IDにつける接頭辞。
+例：prefixがANONの場合は匿名化後の患者ID及び患者名はANON0001からの連番になる。</p>
+</dd>
+<dt>dicom</dt><dd><p>匿名化後のDICOM画像を保存するフォルダ</p>
+</dd>
+<dt>private</dt><dd><p>匿名化時に削除・置換された情報を保存するフォルダ</p>
+</dd>
+<dt>export</dt><dd><p>送付用のデータを保存するフォルダ</p>
+</dd>
+</dl>
+<p>フォルダの詳細は <a class="reference internal" href="data.html"><span class="doc">フォルダ構造</span></a> 参照。</p>
 </div>
+</div>
+<div class="section" id="id7">
+<h2>初回起動<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>初回起動時に画像のような画面が表示された場合は、<span class="guilabel">詳細情報→実行</span> をクリックしてアプリを許可する。</p>
 <div class="figure align-default" id="id9">
+<img alt="_images/smart_screen.jpg" src="_images/smart_screen.jpg" />
+<p class="caption"><span class="caption-text">初回起動時にアプリがブロックされる場合がある。</span><a class="headerlink" href="#id9" title="この画像へのパーマリンク">¶</a></p>
+</div>
+<div class="figure align-default" id="id10">
 <img alt="_images/smart_screen_jikko.jpg" src="_images/smart_screen_jikko.jpg" />
-<p class="caption"><span class="caption-text"><span class="guilabel">詳細情報→実行</span> をクリックしてアプリを許可する。</span><a class="headerlink" href="#id9" title="この画像へのパーマリンク">¶</a></p>
+<p class="caption"><span class="caption-text"><span class="guilabel">詳細情報→実行</span> をクリックしてアプリを許可する。</span><a class="headerlink" href="#id10" title="この画像へのパーマリンク">¶</a></p>
 </div>
 </div>
 </div>
