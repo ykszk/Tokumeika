@@ -1,13 +1,24 @@
 remove = [
   '0008,0020', # Study Date
+  '0008,0021', # Series Date
+  '0008,0022', # Acquisition Date
   '0008,0023', # Content Date
   '0008,0030', # Study Time
+  '0008,0031', # Series Time
+  '0008,0032', # Acquisition Time
   '0008,0033', # Content Time
+  '0008,0050', # Accession Number
+  '0008,0080', # Institution Name
   '0008,0090', # Referring Physician's Name
   '0010,0030', # Patient's Birth Date
   '0010,1010', # Patient's Age
   '0020,0010', # Study ID
   '0020,0011', # Series Number
+  '0032,1032', # Requesting Physician
+  '0032,1033', # Requesting Service
+  '0040,0244', # Performed Procedure Step Start Date
+  '0040,0245', # Performed Procedure Step Start Time
+  '0040,0253', # Performed Procedure Step ID
 ]
 replace = [
   
