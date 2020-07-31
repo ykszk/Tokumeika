@@ -46,8 +46,9 @@ jobs:
       run: |
         yarn build-electron
     - name: Package files
+      id: create_package
       run: |
-        python package.py
+        python package.py ${{ github.ref }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -66,6 +67,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./tokumeika-manager-win32-x64.zip
-        asset_name: tokumeika-manager-win32-x64.zip
+        asset_path: ./${{ steps.create_package.outputs.filename }}
+        asset_name: ${{ steps.create_package.outputs.filename }}
         asset_content_type: application/zip
