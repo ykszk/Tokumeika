@@ -26,7 +26,7 @@
     "eject": "react-scripts eject",
     "build-python": "cd api && pyinstaller api_server.spec",
     "build-electron": "cd electron && electron-packager . tokumeika-manager --out build --platform=win32 arch=x64 --electron-version=v9.1.1 --prune --overwrite --ignore test --ignore examples --ignore ignore",
-    "package": "yarn build && yarn build-python && yarn build-electron && python package.py"
+    "package": "yarn build && yarn build-python && yarn build-electron && python package.py local-build"
   },
   "eslintConfig": {
     "extends": "react-app"
