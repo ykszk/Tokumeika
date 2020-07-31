@@ -2,3 +2,4 @@ dicom = 'dicom'
 private = 'private'
 export = 'export'
 prefix = 'ANON'
+step_size = 5

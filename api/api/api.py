@@ -264,7 +264,8 @@ def export(pid, suid):
         data['last_export'] = utils.now()
         utils.write_json(json_filename, data)
         logger.info('export {}/{}'.format(pid, suid))
-        export_data = {'age': data['age'], 'meta': data['meta']}
+        age = utils.generalize_age(data['age'], config['step_size'])
+        export_data = {'age': age, 'meta': data['meta']}
         utils.write_json(dst / (suid + '.json'), export_data)
     except Exception as e:
         logger.error(str(e))

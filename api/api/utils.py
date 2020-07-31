@@ -5,6 +5,8 @@ from pathlib import Path
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import json
+import re
+import decimal
 import pydicom
 import tqdm
 import toml
@@ -177,7 +179,38 @@ def now(format='%Y/%m/%d %H:%M:%S'):
     return datetime.today().strftime(format)
 
 
+def generalize_age(age_str, step_size):
+    '''
+    Generalize age string. (e.g. '032Y -> 30').
+    Return empty string if invalid age string is provided.
+
+    Args:
+        age_str (str): String that represents patient age.
+        step_size (number): Step size for generalization in years.
+    '''
+    m = re.match(r'^(\d+)([DWMY])$', age_str)
+    if m:
+        if m[2] == 'Y':
+            age = int(m[1])
+        elif m[2] == 'M':
+            age = int(m[1]) / 12
+        elif m[2] == 'W':
+            age = int(m[1]) / 52.1429
+        else:  # m[2] == 'D'
+            age = int(m[1]) / 365
+        generalized = decimal.Decimal(age / step_size).to_integral_value(
+            rounding=decimal.ROUND_HALF_UP) * step_size
+        return str(int(generalized))
+    else:
+        return ''
+
+
 def calc_age(data):
+    '''
+    Get age from removed information.
+    Return [Patient Age (0010,1010)] if it's available.
+    Calculate age from [Patient's Birth Date (0010,0030)] and [Study Date (0008,0020)]
+    '''
     age_tag = '(0010,1010)'
     if age_tag in data['remove'] and data['remove'][age_tag] != '':
         return data['remove'][age_tag]
@@ -185,5 +218,17 @@ def calc_age(data):
     birth_date = datetime.strptime(birth_date, '%Y%m%d')
     study_date = data['remove']['(0008,0020)']
     study_date = datetime.strptime(study_date, '%Y%m%d')
-    age = relativedelta(study_date, birth_date).years
-    return str(age) + 'Y'
+    delta = relativedelta(study_date, birth_date)
+    if delta.years > 0:
+        return str(delta.years) + 'Y'
+
+    if delta.months > 0:
+        return str(delta.months) + 'M'
+
+    if delta.weeks > 0:
+        return str(delta.weeks) + 'W'
+
+    if delta.days > 0:
+        return str(delta.days) + 'D'
+
+    return ''
