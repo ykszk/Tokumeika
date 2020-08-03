@@ -4,7 +4,7 @@
 ダウンロード
 ------------
 
-`配布サイト <https://github.com/yk-szk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-win32-x64.zip`` をダウンロードする
+`配布サイト <https://github.com/yk-szk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードする
 
 .. figure:: images/download.jpg
 
