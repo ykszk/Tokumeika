@@ -209,11 +209,10 @@ def _register(filenames, meta):
     replace.append((MSSOPUID_TAG, gen_sop_uid))
     replace.append((SOPInstanceUID_TAG, gen_sop_uid))
 
-    new_suid = pydicom.uid.generate_uid(
-        prefix=pydicom.uid.PYDICOM_ROOT_UID + SUID_PREFIX,
-        entropy_srcs=[
-            new_name, dcm[SUID_TAG].value if SUID_TAG in dcm else 'suid'
-        ])
+    suid = dcm[SUID_TAG].value if SUID_TAG in dcm else str(time.time())
+    new_suid = pydicom.uid.generate_uid(prefix=pydicom.uid.PYDICOM_ROOT_UID +
+                                        SUID_PREFIX,
+                                        entropy_srcs=[new_name, suid])
     replace.append((SUID_TAG, new_suid))
 
     new_study_uid = pydicom.uid.generate_uid(
@@ -226,7 +225,7 @@ def _register(filenames, meta):
     dcm_generator = utils.DcmGenerator(filenames, replace,
                                        anon_config['remove'])
 
-    stem = new_suid
+    stem = suid
     dicom_outdir = dicom_dir / new_name
     dicom_outdir.mkdir(parents=True, exist_ok=True)
     private_outdir = private_dir / new_name
@@ -288,13 +287,14 @@ def export(pid, suid):
         dst = exportdir / pid
         dst.mkdir(parents=True, exist_ok=True)
         data = utils.read_json(json_filename)
-        shutil.copy(dcm_filename, dst)
+        new_suid = data['replace'][utils.tag2str(SUID_TAG)][1]
+        shutil.copyfile(dcm_filename, dst / (new_suid + '.zip'))
         data['last_export'] = utils.now()
         utils.write_json(json_filename, data)
         logger.info('export {}/{}'.format(pid, suid))
         age = utils.generalize_age(data['age'], config['step_size'])
         export_data = {'age': age, 'meta': data['meta']}
-        utils.write_json(dst / (suid + '.json'), export_data)
+        utils.write_json(dst / (new_suid + '.json'), export_data)
     except Exception as e:
         logger.error(str(e))
         return {'success': False, 'reason': str(e)}
