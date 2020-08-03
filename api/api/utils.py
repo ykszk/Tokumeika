@@ -103,7 +103,7 @@ def compress_remove(remove):
 class DcmGenerator(object):
     '''
     Args:
-        replace_rules (list): list of tuples of (tag, new_value)
+        replace_rules (list): list of tuples of (tag, new_value). new_value is either a str or a generator function.
         remove_rules (list): list of tags to remove
     '''
     def __init__(self, filenames, replace_rules, remove_rules):
@@ -131,11 +131,17 @@ class DcmGenerator(object):
         fn = Path(fn).name
 
         for tag, new_value in self.replace_rules:
-            if tag in dcm:
-                old_value = str(dcm[tag].value)
+            if hasattr(new_value, '__call__'):
+                new_value = new_value(dcm)
+            if tag[0] == 0x0002:
+                old_value = str(dcm.file_meta[tag].value)
+                dcm.file_meta[tag].value = new_value
             else:
-                old_value = ''
-            dcm[tag].value = new_value
+                if tag in dcm:
+                    old_value = str(dcm[tag].value)
+                else:
+                    old_value = ''
+                dcm[tag].value = new_value
             self.replace_history[tag2str(tag)].append(
                 (fn, (old_value, new_value)))
 

@@ -21,6 +21,14 @@ from . import config_loader
 PID_TAG = (0x0010, 0x0020)
 PATIENT_NAME_TAG = (0x0010, 0x0010)
 SUID_TAG = (0x0020, 0x000E)  # series instance UID
+MSSOPUID_TAG = (0x0002, 0x0003)  # media storage SOP instance UID
+ImplClassUID_TAG = (0x0002, 0x0012)  # Implementation Class UID
+StudyIUID = (0x0020, 0x000D)  # study instance UID
+SOPInstanceUID_TAG = (0x0008, 0x0018)  # SOP Instance UID
+
+SOP_PREFIX = '0.'
+SUID_PREFIX = '2.'
+STUDY_UID_PREFIX = '1.'
 
 logFormatStr = '[%(filename)s:%(lineno)d] %(asctime)s %(levelname)s :%(message)s'
 basicConfig(level=INFO, format=logFormatStr)
@@ -189,16 +197,36 @@ def _register(filenames, meta):
         pid = dcm[PID_TAG].value
     else:
         pid = ''
+
     new_name = db.get_anonymized_name(pid)
     replace.append((PID_TAG, new_name))
     replace.append((PATIENT_NAME_TAG, new_name))
+    replace.append((ImplClassUID_TAG, pydicom.uid.PYDICOM_IMPLEMENTATION_UID))
+
+    gen_sop_uid = lambda dcm: pydicom.uid.generate_uid(
+        prefix=pydicom.uid.PYDICOM_ROOT_UID + SOP_PREFIX,
+        entropy_srcs=[dcm.file_meta[MSSOPUID_TAG].value])
+    replace.append((MSSOPUID_TAG, gen_sop_uid))
+    replace.append((SOPInstanceUID_TAG, gen_sop_uid))
+
+    new_suid = pydicom.uid.generate_uid(
+        prefix=pydicom.uid.PYDICOM_ROOT_UID + SUID_PREFIX,
+        entropy_srcs=[
+            new_name, dcm[SUID_TAG].value if SUID_TAG in dcm else 'suid'
+        ])
+    replace.append((SUID_TAG, new_suid))
+
+    new_study_uid = pydicom.uid.generate_uid(
+        prefix=pydicom.uid.PYDICOM_ROOT_UID + STUDY_UID_PREFIX,
+        entropy_srcs=[
+            new_name,
+            dcm[StudyIUID].value if StudyIUID in dcm else 'study_suid'
+        ])
+    replace.append((StudyIUID, new_study_uid))
     dcm_generator = utils.DcmGenerator(filenames, replace,
                                        anon_config['remove'])
 
-    if SUID_TAG in dcm:
-        stem = str(dcm[SUID_TAG].value)
-    else:
-        stem = str(time.time())
+    stem = new_suid
     dicom_outdir = dicom_dir / new_name
     dicom_outdir.mkdir(parents=True, exist_ok=True)
     private_outdir = private_dir / new_name
