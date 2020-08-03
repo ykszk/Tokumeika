@@ -225,7 +225,7 @@ def _register(filenames, meta):
     dcm_generator = utils.DcmGenerator(filenames, replace,
                                        anon_config['remove'])
 
-    stem = suid
+    stem = new_suid
     dicom_outdir = dicom_dir / new_name
     dicom_outdir.mkdir(parents=True, exist_ok=True)
     private_outdir = private_dir / new_name
@@ -287,14 +287,13 @@ def export(pid, suid):
         dst = exportdir / pid
         dst.mkdir(parents=True, exist_ok=True)
         data = utils.read_json(json_filename)
-        new_suid = data['replace'][utils.tag2str(SUID_TAG)][1]
-        shutil.copyfile(dcm_filename, dst / (new_suid + '.zip'))
+        shutil.copy(dcm_filename, dst)
         data['last_export'] = utils.now()
         utils.write_json(json_filename, data)
         logger.info('export {}/{}'.format(pid, suid))
         age = utils.generalize_age(data['age'], config['step_size'])
         export_data = {'age': age, 'meta': data['meta']}
-        utils.write_json(dst / (new_suid + '.json'), export_data)
+        utils.write_json(dst / (suid + '.json'), export_data)
     except Exception as e:
         logger.error(str(e))
         return {'success': False, 'reason': str(e)}
