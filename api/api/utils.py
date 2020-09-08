@@ -8,23 +8,31 @@ import json
 import re
 import decimal
 import pydicom
+from pydicom.datadict import keyword_for_tag
 import tqdm
 import toml
 
 
-def save_as_zip(contents, compresslevel, zip_filename=None, verbose=False):
+def save_as_zip(contents,
+                compresslevel,
+                zip_filename=None,
+                verbose=False,
+                total=None):
     '''
     Args:
-        contents (iterable): Iterable object that returns (filename, content)
+        contents (iterable): Iterable object that returns (filename, content(bytes))
         compresslevel (int): Compression level for zipping. Specify -1 for no compression.
         zip_filename (str): Filename for zipped contents. If None, bytes is returned.
+        verbose (bool): Show progress bar
+        total (int): Passed to tqdm for in verbose mode.
     '''
     compression = zipfile.ZIP_STORED if compresslevel < 0 else zipfile.ZIP_DEFLATED
     with zipfile.ZipFile(zip_filename,
                          'w',
                          compression,
                          compresslevel=compresslevel) as zf:
-        for filename, content in tqdm.tqdm(contents) if verbose else contents:
+        for filename, content in tqdm.tqdm(
+                contents, total=total) if verbose else contents:
             zf.writestr(filename, content)
 
 
@@ -41,7 +49,11 @@ def dcms2zip(filenames, dcms, compresslevel, zip_filename, verbose=False):
         zip_filename (str): Filename for zipped contents. If None, bytes is returned.
     '''
     generator = zip(filenames, (dcm2bytes(dcm) for dcm in dcms))
-    return save_as_zip(generator, compresslevel, zip_filename, verbose)
+    return save_as_zip(generator,
+                       compresslevel,
+                       zip_filename,
+                       verbose,
+                       total=len(filenames))
 
 
 def tag2int(tag_str):
@@ -134,24 +146,25 @@ class DcmGenerator(object):
             if hasattr(new_value, '__call__'):
                 new_value = new_value(dcm)
             if tag[0] == 0x0002:
-                old_value = str(dcm.file_meta[tag].value)
+                old_value = dcm.file_meta[tag].value
                 dcm.file_meta[tag].value = new_value
             else:
                 if tag in dcm:
-                    old_value = str(dcm[tag].value)
+                    old_value = dcm[tag].value
+                    dcm[tag].value = new_value
                 else:
                     old_value = ''
-                dcm[tag].value = new_value
+                    kw = keyword_for_tag(tag)
+                    setattr(dcm, kw, new_value)
             self.replace_history[tag2str(tag)].append(
-                (fn, (old_value, new_value)))
+                (fn, (serialize_tag(old_value), new_value)))
 
         for tag in self.remove_rules:
             if tag in dcm:
-                old_value = str(dcm[tag].value)
+                old_value = dcm[tag].value
                 del dcm[tag]
-            else:
-                old_value = ''
-            self.remove_history[tag2str(tag)].append((fn, old_value))
+                self.remove_history[tag2str(tag)].append(
+                    (fn, serialize_tag(old_value)))
 
         self._i += 1
         return dcm
@@ -166,6 +179,18 @@ class DcmGenerator(object):
             }
 
         return self._history
+
+
+def dataset2obj(ds):
+    return dict([(str(k).replace(' ', ''), serialize_tag(v.value))
+                 for k, v in ds.items()])
+
+
+def serialize_tag(o):
+    if isinstance(o, pydicom.sequence.Sequence):
+        return [dataset2obj(ds) for ds in o]
+    else:
+        return str(o)
 
 
 def write_json(filename, data):
