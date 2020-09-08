@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Typography } from '@material-ui/core';
-import { Table, TableBody, TableHead, Chip, Tooltip } from '@material-ui/core';
+import {
+  Table,
+  TableBody,
+  TableHead,
+  Chip,
+  Tooltip,
+  Box,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { MetaType } from './anonymizer/Dcm';
@@ -236,15 +243,17 @@ export function Browser() {
     );
   });
   return (
-    <Table size="small">
-      <TableHead>
-        <StyledTableRow>
-          {sortableHeaders}
-          <StyledTableCell>Additional data</StyledTableCell>
-          <StyledTableCell>Edit</StyledTableCell>
-        </StyledTableRow>
-      </TableHead>
-      <TableBody>{rows}</TableBody>
-    </Table>
+    <Box className={classes.vspacing}>
+      <Table size="small">
+        <TableHead>
+          <StyledTableRow>
+            {sortableHeaders}
+            <StyledTableCell>Additional data</StyledTableCell>
+            <StyledTableCell>Edit</StyledTableCell>
+          </StyledTableRow>
+        </TableHead>
+        <TableBody>{rows}</TableBody>
+      </Table>
+    </Box>
   );
 }
