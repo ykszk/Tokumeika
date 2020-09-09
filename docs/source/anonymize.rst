@@ -46,9 +46,17 @@
 
    アイコンをクリックしてダイアログを起動する。
 
-.. figure:: images/add_meta2.jpg
+.. figure:: images/add_meta2-1.png
 
-   該当するアイコンをクリックして追加情報を付加する。
+   初期状態では :guilabel:`骨折なし` にチェックがついている。
+
+.. figure:: images/add_meta2-2.png
+
+   項目を追加する場合はまず :guilabel:`骨折なし` のチェックをはずす。
+
+.. figure:: images/add_meta2-3.png
+
+   必要な項目にチェックをつけ :guilabel:`OK` をクリックして確定。 :guilabel:`Surgery` は対応する :guilabel:`Fracture` の項目がチェックされていないとチェックできないので注意。
 
 .. figure:: images/add_meta3.jpg
 
@@ -56,11 +64,11 @@
 
 匿名化処理の実行
 ----------------
-:guilabel:`EXECUTE` ボタンをクリックして匿名化処理を実行する。
+:guilabel:`ANONYMIZE` ボタンをクリックして匿名化処理を実行する。
 
 .. figure:: images/exec1.jpg
 
-   :guilabel:`EXECUTE` ボタンをクリック
+   :guilabel:`ANONYMIZE` ボタンをクリック
 
 .. figure:: images/exec2.jpg
 

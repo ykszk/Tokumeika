@@ -19,6 +19,13 @@
 アプリと同じフォルダ内の ``config/config.toml`` を編集して初期設定を行う。
 `prefix = 'ANON'` を`prefix = 'OUH'` 等に変更する。
 
+メモ帳での編集方法
+*******************
+* 設定ファイル ``config/config.toml`` を右クリック。
+* :guilabel:`プログラムから開く` をクリック
+* :guilabel:`その他のアプリ` をクリック
+* メモ帳を選択して :guilabel:`OK` をクリック
+
 項目
 ******
 
@@ -51,3 +58,6 @@ export
 .. figure:: images/smart_screen_jikko.jpg
 
    :guilabel:`詳細情報→実行` をクリックしてアプリを許可する。
+
+
+「このアプリの機能のいくつかがwindows defenderファイアウォールでブロックされています」と表示された場合はキャンセルをクリック。
