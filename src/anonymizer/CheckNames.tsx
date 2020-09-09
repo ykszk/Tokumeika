@@ -3,6 +3,7 @@ import { Table, TableBody, TableHead } from '@material-ui/core';
 import { Box, Button, Chip, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { metaItems2Chips } from '../Browser';
 import { AnonymizerState, AnonymizerMain } from './Anonymizer';
 import { StyledTableCell, StyledTableRow } from './StyledTable';
 import { MetaDialog, cloneMetaData } from './MetaDialog';
@@ -112,16 +113,10 @@ export function AnonCheckNames(props: {
       </TableHead>
       <TableBody>
         {entries.map((entry) => {
-          const selected = [] as string[];
           const meta = metaMap.get(entry.SeriesInstanceUID);
           if (meta === undefined) {
             return null;
           }
-          metaNameMap.forEach((name, id) => {
-            if (meta.items.has(id)) {
-              selected.push(id);
-            }
-          });
           const note =
             meta.note === '' ? null : (
               <Tooltip title={<Typography>{meta.note}</Typography>}>
@@ -136,11 +131,7 @@ export function AnonCheckNames(props: {
                 <StyledTableCell>{entry.series_desc}</StyledTableCell>
                 <StyledTableCell>
                   <div className={classes.spacing}>
-                    {selected.map((id) => {
-                      return (
-                        <Chip label={metaNameMap.get(id)} size="small"></Chip>
-                      );
-                    })}
+                    {metaItems2Chips(new Set(meta.items), metaNameMap)}
                     {note}
                   </div>
                 </StyledTableCell>

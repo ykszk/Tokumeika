@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableHead } from '@material-ui/core';
 
 import { StyledTableCell, StyledTableRow } from './StyledTable';
-
+import { metaItems2Chips } from '../Browser';
 import { AnonymizerState } from './Anonymizer';
 import * as Dcm from './Dcm';
 
@@ -137,11 +137,7 @@ export function AnonExec(props: {
                 <StyledTableCell>{entry.series_desc}</StyledTableCell>
                 <StyledTableCell>
                   <div className={classes.spacing}>
-                    {selected.map((id) => {
-                      return (
-                        <Chip label={metaNameMap.get(id)} size="small"></Chip>
-                      );
-                    })}
+                    {metaItems2Chips(entry.meta.items, metaNameMap)}
                     {note}
                   </div>
                 </StyledTableCell>
