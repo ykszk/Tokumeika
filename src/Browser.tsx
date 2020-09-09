@@ -50,6 +50,56 @@ function eqSet<T>(a: Set<T>, b: Set<T>) {
   return true;
 }
 
+export function metaItems2Chips(
+  items: Set<string>,
+  metaNameMap: Map<string, string>,
+) {
+  function id2name(id: string) {
+    let prefix: string;
+    let suffix: string;
+    if (id.endsWith('_both')) {
+      prefix = id.substring(0, id.length - 5);
+      suffix = ' (骨折・手術)';
+    } else if (id.endsWith('_fx')) {
+      prefix = id.substring(0, id.length - 3);
+      suffix = ' (骨折)';
+    } else {
+      // ends with _sx
+      prefix = id.substring(0, id.length - 3);
+      suffix = ' (手術)';
+    }
+    return (
+      (metaNameMap.get(prefix)
+        ? metaNameMap.get(prefix)
+        : `Unknown:${prefix}`) + suffix
+    );
+  }
+  return Array.from(items)
+    .map((id) => {
+      if (id.endsWith('_fx')) {
+        const prefix = id.substring(0, id.length - 3);
+        if (items.has(prefix + '_sx')) {
+          return prefix + '_both'; // both
+        } else {
+          return id; // fx only
+        }
+      } else {
+        const prefix = id.substring(0, id.length - 3);
+        if (items.has(prefix + '_fx')) {
+          return prefix + '_dummy';
+        } else {
+          return id;
+        }
+      }
+    })
+    .filter((id) => {
+      return !id.endsWith('_dummy');
+    })
+    .map((id) => {
+      return <Chip key={id} label={id2name(id)} size="small"></Chip>;
+    });
+}
+
 const sortables: SortableType<EntryType>[] = [
   {
     id: 'original_pid',
@@ -197,17 +247,7 @@ export function Browser() {
         </StyledTableCell>
         <StyledTableCell>
           <div className={classes.vspacing}>
-            {Array.from(e.meta.items).map((id) => {
-              return (
-                <Chip
-                  key={id}
-                  label={
-                    metaNameMap.get(id) ? metaNameMap.get(id) : `Unknown:${id}`
-                  }
-                  size="small"
-                ></Chip>
-              );
-            })}
+            {metaItems2Chips(e.meta.items, metaNameMap)}
             {e.meta.note === '' ? null : (
               <Tooltip title={<Typography>{e.meta.note}</Typography>}>
                 <Chip variant="outlined" size="small" label="Note" />

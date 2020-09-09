@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
-import { Dialog, Button, Box, TextField } from '@material-ui/core';
+import {
+  Dialog,
+  Button,
+  Checkbox,
+  Box,
+  Table,
+  TableBody,
+  TableHead,
+  TextField,
+} from '@material-ui/core';
 import { DialogTitle, DialogContent, DialogActions } from './CustomizedDialog';
+import { StyledTableCell, StyledTableRow } from './StyledTable';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
@@ -8,15 +18,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { MetaType } from './Dcm';
 
 const useStyles = makeStyles((theme) => ({
-  selected: {
-    backgroundColor: theme.palette.secondary.main,
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.dark,
-    },
-  },
-  notSelected: {
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
+  vspacing: {
+    '& > *': {
+      margin: theme.spacing(0.5),
     },
   },
   textarea: {
@@ -58,46 +62,55 @@ export function MetaDialog(props: {
     setDialogOpen(false);
     handleData(meta);
   };
-  const buttons: JSX.Element[] = [];
+  const rows: JSX.Element[] = [];
   metaNameMap.forEach((name, id) => {
-    buttons.push(
+    const id_fx = id + '_fx';
+    const id_sx = id + '_sx';
+    rows.push(
       <React.Fragment key={id}>
-        <Button
-          className={
-            meta.items.has(id) ? classes.selected : classes.notSelected
-          }
-          onClick={handleToggleButton}
-          variant="contained"
-          id={id}
-        >
-          {name}
-        </Button>
+        <StyledTableRow>
+          <StyledTableCell>{name}</StyledTableCell>
+          <StyledTableCell>
+            <Checkbox
+              checked={meta.items.has(id_fx)}
+              id={id_fx}
+              size="small"
+              onChange={handleCheckbox}
+            />
+          </StyledTableCell>
+          <StyledTableCell>
+            <Checkbox
+              checked={meta.items.has(id_sx)}
+              id={id_sx}
+              size="small"
+              onChange={handleCheckbox}
+            />
+          </StyledTableCell>
+        </StyledTableRow>
       </React.Fragment>,
     );
   });
   // Add unknown ids if there's any.
   meta.items.forEach((id) => {
-    if (!metaNameMap.has(id)) {
-      buttons.push(
+    if (!metaNameMap.has(id) && !id.endsWith('_fx') && !id.endsWith('_sx')) {
+      rows.push(
         <React.Fragment key={id}>
-          <Button
-            className={
-              meta.items.has(id) ? classes.selected : classes.notSelected
-            }
-            onClick={handleToggleButton}
-            variant="contained"
-            id={id}
-          >
-            {`Unknown:${id}`}
-          </Button>
+          <StyledTableRow>
+            <StyledTableCell>{`Unknown:${id}`}</StyledTableCell>
+            <StyledTableCell></StyledTableCell>
+            <StyledTableCell></StyledTableCell>
+          </StyledTableRow>
         </React.Fragment>,
       );
     }
   });
 
-  function handleToggleButton(
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) {
+  function onTextChange(event: React.ChangeEvent<HTMLInputElement>) {
+    meta.note = event.target.value;
+    setMeta(Object.assign({}, meta));
+  }
+
+  function handleCheckbox(event: React.ChangeEvent<HTMLInputElement>) {
     const id = event.currentTarget.id;
     if (meta.items.has(id)) {
       meta.items.delete(id);
@@ -105,11 +118,6 @@ export function MetaDialog(props: {
       meta.items.add(id);
     }
     setMeta(cloneMetaData(meta));
-  }
-
-  function onTextChange(event: React.ChangeEvent<HTMLInputElement>) {
-    meta.note = event.target.value;
-    setMeta(Object.assign({}, meta));
   }
 
   return (
@@ -128,20 +136,29 @@ export function MetaDialog(props: {
           {title}
         </DialogTitle>
         <DialogContent>
-          <Box p={2} className={classes.spacing}>
-            {buttons}
+          <Box className={classes.vspacing}>
+            <Table size="small" stickyHeader>
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell>Part</StyledTableCell>
+                  <StyledTableCell>Fracture</StyledTableCell>
+                  <StyledTableCell>Surgery</StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>{rows}</TableBody>
+            </Table>
+            <TextField
+              label="Note"
+              placeholder=""
+              value={meta.note}
+              multiline
+              rows={3}
+              fullWidth={true}
+              variant="filled"
+              onChange={onTextChange}
+              inputProps={{ className: classes.textarea }}
+            />
           </Box>
-          <TextField
-            label="Note"
-            placeholder=""
-            value={meta.note}
-            multiline
-            rows={3}
-            fullWidth={true}
-            variant="filled"
-            onChange={onTextChange}
-            inputProps={{ className: classes.textarea }}
-          />
         </DialogContent>
         <DialogActions>
           <Button

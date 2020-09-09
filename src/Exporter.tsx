@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
-import { EntryType } from './Browser';
+import { EntryType, metaItems2Chips } from './Browser';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { SortableType, Order, descendingComparator } from './SortableTable';
 
@@ -181,17 +181,7 @@ export function Exporter() {
         <StyledTableCell>{e.last_export ? e.last_export : ''}</StyledTableCell>
         <StyledTableCell>
           <div className={classes.vspacing}>
-            {Array.from(e.meta.items).map((id) => {
-              return (
-                <Chip
-                  key={id}
-                  label={
-                    metaNameMap.get(id) ? metaNameMap.get(id) : `Unknown:${id}`
-                  }
-                  size="small"
-                ></Chip>
-              );
-            })}
+            {metaItems2Chips(e.meta.items, metaNameMap)}
             {e.meta.note === '' ? null : (
               <Tooltip title={<Typography>{e.meta.note}</Typography>}>
                 <Chip variant="outlined" size="small" label="Note" />
