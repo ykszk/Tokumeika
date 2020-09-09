@@ -74,3 +74,10 @@ class NameDB(object):
             new_name = self.create_new_name()
             self.name_dict[name] = new_name
             return new_name
+
+    def to_csv(self, filename):
+        with open(filename, 'w') as f:
+            f.write('Original PatientID,Anonymized PatientID\n')
+            names = sorted(self.name_dict.keys())
+            for name in names:
+                f.write('{},{}\n'.format(name, self.name_dict[name]))

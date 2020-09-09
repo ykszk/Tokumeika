@@ -55,6 +55,10 @@ private_dir.mkdir(parents=True, exist_ok=True)
 exportdir = Path(config['export'])
 exportdir.mkdir(parents=True, exist_ok=True)
 
+anon_table_filename = private_dir / 'anonymize_table.csv'
+
+db.to_csv(anon_table_filename)
+
 
 def build_history_db():
     for fn in private_dir.glob('**/*.json'):
@@ -247,6 +251,7 @@ def _register(filenames, meta):
     history['age'] = str(age)
     utils.write_json(private_outdir / (stem + '.json'), history)
     db.add(pid, new_name)
+    db.to_csv(anon_table_filename)
 
 
 @app.route('/register', methods=['PUT'])
