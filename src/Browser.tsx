@@ -11,7 +11,12 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledTableCell, StyledTableRow } from './anonymizer/StyledTable';
 import { MetaType } from './anonymizer/Dcm';
-import { MetaDialog, cloneMetaData } from './anonymizer/MetaDialog';
+import {
+  MetaDialog,
+  cloneMetaData,
+  suffix_fracture,
+  suffix_surgery,
+} from './anonymizer/MetaDialog';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { SortableType, Order, descendingComparator } from './SortableTable';
 interface PatientType {
@@ -50,6 +55,9 @@ function eqSet<T>(a: Set<T>, b: Set<T>) {
   return true;
 }
 
+const suffix_both = '_both';
+const suffix_dummy = '_dummy';
+
 export function metaItems2Chips(
   items: Set<string>,
   metaNameMap: Map<string, string>,
@@ -57,10 +65,10 @@ export function metaItems2Chips(
   function id2name(id: string) {
     let prefix: string;
     let suffix: string;
-    if (id.endsWith('_both')) {
+    if (id.endsWith(suffix_both)) {
       prefix = id.substring(0, id.length - 5);
       suffix = ' (骨折・手術)';
-    } else if (id.endsWith('_fx')) {
+    } else if (id.endsWith(suffix_fracture)) {
       prefix = id.substring(0, id.length - 3);
       suffix = ' (骨折)';
     } else {
@@ -76,24 +84,24 @@ export function metaItems2Chips(
   }
   return Array.from(items)
     .map((id) => {
-      if (id.endsWith('_fx')) {
+      if (id.endsWith(suffix_fracture)) {
         const prefix = id.substring(0, id.length - 3);
-        if (items.has(prefix + '_sx')) {
-          return prefix + '_both'; // both
+        if (items.has(prefix + suffix_surgery)) {
+          return prefix + suffix_both; // both
         } else {
           return id; // fx only
         }
       } else {
         const prefix = id.substring(0, id.length - 3);
-        if (items.has(prefix + '_fx')) {
-          return prefix + '_dummy';
+        if (items.has(prefix + suffix_fracture)) {
+          return prefix + suffix_dummy;
         } else {
           return id;
         }
       }
     })
     .filter((id) => {
-      return !id.endsWith('_dummy');
+      return !id.endsWith(suffix_dummy);
     })
     .map((id) => {
       return <Chip key={id} label={id2name(id)} size="small"></Chip>;

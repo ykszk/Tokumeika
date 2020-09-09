@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Dialog,
   Button,
+  FormControlLabel,
   Checkbox,
   Box,
   Table,
@@ -37,8 +38,8 @@ export function cloneMetaData(meta: MetaType) {
   return { items: new Set(meta.items), note: meta.note };
 }
 
-const fracture_suffix = '_fx';
-const surgery_suffix = '_sx';
+export const suffix_fracture = '_fx';
+export const suffix_surgery = '_sx';
 
 export function MetaDialog(props: {
   title: string;
@@ -51,6 +52,7 @@ export function MetaDialog(props: {
   const [openDialog, setDialogOpen] = useState(false);
 
   const [meta, setMeta] = useState(cloneMetaData(iniMetaState));
+  const [noneChecked, setNoneChecked] = useState(meta.items.size === 0);
 
   const handleClickOpen = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -67,8 +69,8 @@ export function MetaDialog(props: {
   };
   const rows: JSX.Element[] = [];
   metaNameMap.forEach((name, id) => {
-    const id_fx = id + fracture_suffix;
-    const id_sx = id + surgery_suffix;
+    const id_fx = id + suffix_fracture;
+    const id_sx = id + suffix_surgery;
     rows.push(
       <React.Fragment key={id}>
         <StyledTableRow>
@@ -78,6 +80,7 @@ export function MetaDialog(props: {
               checked={meta.items.has(id_fx)}
               id={id_fx}
               size="small"
+              disabled={noneChecked}
               onChange={handleCheckbox}
             />
           </StyledTableCell>
@@ -86,7 +89,7 @@ export function MetaDialog(props: {
               checked={meta.items.has(id_sx)}
               id={id_sx}
               size="small"
-              disabled={!meta.items.has(id_fx)}
+              disabled={noneChecked || !meta.items.has(id_fx)}
               onChange={handleCheckbox}
             />
           </StyledTableCell>
@@ -98,8 +101,8 @@ export function MetaDialog(props: {
   meta.items.forEach((id) => {
     if (
       !metaNameMap.has(id) &&
-      !id.endsWith(fracture_suffix) &&
-      !id.endsWith(surgery_suffix)
+      !id.endsWith(suffix_fracture) &&
+      !id.endsWith(suffix_surgery)
     ) {
       rows.push(
         <React.Fragment key={id}>
@@ -122,15 +125,26 @@ export function MetaDialog(props: {
     const id = event.currentTarget.id;
     if (meta.items.has(id)) {
       meta.items.delete(id);
-      if (id.endsWith(surgery_suffix)) {
-        // delete fracture
-        const id_fx = id.substring(0, id.length - 3) + fracture_suffix;
+      if (id.endsWith(suffix_fracture)) {
+        // delete surgery
+        const id_fx = id.substring(0, id.length - 3) + suffix_surgery;
         meta.items.delete(id_fx);
       }
     } else {
       meta.items.add(id);
     }
     setMeta(cloneMetaData(meta));
+  }
+
+  function handleNoneChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean,
+  ) {
+    if (checked) {
+      meta.items = new Set<string>();
+      setMeta(cloneMetaData(meta));
+    }
+    setNoneChecked(checked);
   }
 
   return (
@@ -150,6 +164,16 @@ export function MetaDialog(props: {
         </DialogTitle>
         <DialogContent>
           <Box className={classes.vspacing}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={noneChecked}
+                  onChange={handleNoneChange}
+                  name="checkedNone"
+                />
+              }
+              label="骨折なし"
+            />
             <Table size="small" stickyHeader>
               <TableHead>
                 <StyledTableRow>
