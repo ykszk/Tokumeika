@@ -18,7 +18,7 @@ from . import utils
 from . import namedb
 from . import config_loader
 
-_version = '0.2.2'
+_version = '0.3.0'
 
 PID_TAG = (0x0010, 0x0020)
 PATIENT_NAME_TAG = (0x0010, 0x0010)
