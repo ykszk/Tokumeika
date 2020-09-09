@@ -62,6 +62,7 @@ export function MetaDialog(props: {
   const handleClose = () => {
     setMeta(cloneMetaData(iniMetaState));
     setDialogOpen(false);
+    setNoneChecked(iniMetaState.items.size === 0);
   };
   const handleOK = () => {
     setDialogOpen(false);
