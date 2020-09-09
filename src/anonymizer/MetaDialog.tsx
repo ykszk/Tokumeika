@@ -37,6 +37,9 @@ export function cloneMetaData(meta: MetaType) {
   return { items: new Set(meta.items), note: meta.note };
 }
 
+const fracture_suffix = '_fx';
+const surgery_suffix = '_sx';
+
 export function MetaDialog(props: {
   title: string;
   handleData: (meta: MetaType) => void;
@@ -64,8 +67,8 @@ export function MetaDialog(props: {
   };
   const rows: JSX.Element[] = [];
   metaNameMap.forEach((name, id) => {
-    const id_fx = id + '_fx';
-    const id_sx = id + '_sx';
+    const id_fx = id + fracture_suffix;
+    const id_sx = id + surgery_suffix;
     rows.push(
       <React.Fragment key={id}>
         <StyledTableRow>
@@ -83,6 +86,7 @@ export function MetaDialog(props: {
               checked={meta.items.has(id_sx)}
               id={id_sx}
               size="small"
+              disabled={!meta.items.has(id_fx)}
               onChange={handleCheckbox}
             />
           </StyledTableCell>
@@ -92,7 +96,11 @@ export function MetaDialog(props: {
   });
   // Add unknown ids if there's any.
   meta.items.forEach((id) => {
-    if (!metaNameMap.has(id) && !id.endsWith('_fx') && !id.endsWith('_sx')) {
+    if (
+      !metaNameMap.has(id) &&
+      !id.endsWith(fracture_suffix) &&
+      !id.endsWith(surgery_suffix)
+    ) {
       rows.push(
         <React.Fragment key={id}>
           <StyledTableRow>
@@ -114,6 +122,11 @@ export function MetaDialog(props: {
     const id = event.currentTarget.id;
     if (meta.items.has(id)) {
       meta.items.delete(id);
+      if (id.endsWith(surgery_suffix)) {
+        // delete fracture
+        const id_fx = id.substring(0, id.length - 3) + fracture_suffix;
+        meta.items.delete(id_fx);
+      }
     } else {
       meta.items.add(id);
     }
