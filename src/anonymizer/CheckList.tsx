@@ -145,7 +145,7 @@ export function AnonCheckList(props: {
   );
   return (
     <Box className={classes.root}>
-      <Typography variant="subtitle1">Select series</Typography>
+      <Typography variant="subtitle1">(2/4) Select series</Typography>
       {dialog}
       {table}
       <Button variant="contained" onClick={onProceedButtonClick}>

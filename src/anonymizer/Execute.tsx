@@ -170,7 +170,7 @@ export function AnonExec(props: {
   );
   return (
     <Box className={classes.vspacing}>
-      <Typography variant="subtitle1">Execute anonymization</Typography>
+      <Typography variant="subtitle1">(4/4) Execute anonymization</Typography>
       {table}
       <Button
         disabled={buttonDisabled}
@@ -178,7 +178,7 @@ export function AnonExec(props: {
         color="primary"
         onClick={onClick}
       >
-        Execute
+        Anonymize
       </Button>
     </Box>
   );

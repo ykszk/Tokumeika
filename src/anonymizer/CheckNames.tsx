@@ -163,7 +163,7 @@ export function AnonCheckNames(props: {
   );
   return (
     <Box className={classes.vspacing}>
-      <Typography variant="subtitle1">Edit meta data</Typography>
+      <Typography variant="subtitle1">(3/4) Edit meta data</Typography>
       {table}
       <Button variant="contained" onClick={onButtonClick}>
         Proceed

@@ -97,7 +97,9 @@ export function AnonGetList(props: {
 
   return (
     <div>
-      <Typography variant="subtitle1">Choose input DICOM directory</Typography>
+      <Typography variant="subtitle1">
+        (1/4) Choose input DICOM directory
+      </Typography>
       <form autoComplete="off" className={classes.root}>
         {openDirDialog}
         <TextField
