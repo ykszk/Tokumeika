@@ -18,6 +18,8 @@ from . import utils
 from . import namedb
 from . import config_loader
 
+_version = '0.2.2'
+
 PID_TAG = (0x0010, 0x0020)
 PATIENT_NAME_TAG = (0x0010, 0x0010)
 SUID_TAG = (0x0020, 0x000E)  # series instance UID
@@ -297,7 +299,7 @@ def export(pid, suid):
         utils.write_json(json_filename, data)
         logger.info('export {}/{}'.format(pid, suid))
         age = utils.generalize_age(data['age'], config['step_size'])
-        export_data = {'age': age, 'meta': data['meta']}
+        export_data = {'age': age, 'meta': data['meta'], 'version': _version}
         utils.write_json(dst / (suid + '.json'), export_data)
     except Exception as e:
         logger.error(str(e))
