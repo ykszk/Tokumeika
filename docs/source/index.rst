@@ -14,6 +14,7 @@ Welcome to Tokumeika's documentation!
    anonymize
    export
    data
+   vpn/vpn
 
 
 
