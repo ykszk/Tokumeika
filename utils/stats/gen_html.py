@@ -82,7 +82,7 @@ def main():
     f_count = count(melted, 'hospital', 'fracture')
     fig = plot_bar(f_count)
     fig.update_layout(barmode='stack', title='骨折分布', template=template)
-    fig.update_xaxes(title_text='骨折')
+    fig.update_xaxes(title_text='部位')
     fig.update_yaxes(title_text='Count')
     divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
@@ -104,13 +104,14 @@ def main():
     f_count = count(melted, 'hospital', 'surgery')
     fig = plot_bar(f_count)
     fig.update_layout(barmode='stack', title='手術分布', template=template)
-    fig.update_xaxes(title_text='手術')
+    fig.update_xaxes(title_text='部位')
     fig.update_yaxes(title_text='Count')
     divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
     # output html
     from jinja2 import Environment, FileSystemLoader
-    env = Environment(loader=FileSystemLoader('templates', encoding='utf8'))
+    env = Environment(loader=FileSystemLoader(
+        Path(__file__).parent / 'templates', encoding='utf8'))
     template = env.get_template('template.j2')
     html = template.render(body='\n'.join(divs))
     with open(args.output, 'w', encoding='utf8') as f:
