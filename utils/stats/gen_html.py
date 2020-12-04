@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 from pathlib import Path
+from datetime import datetime
 
 from logzero import logger
 logger.setLevel('DEBUG')
@@ -24,7 +25,9 @@ def main():
     args = parser.parse_args()
 
     import pandas as pd
+    import plotly.express as px
     import plotly.graph_objects as go
+    from jinja2 import Environment, FileSystemLoader
 
     df_meta = pd.read_csv(args.meta, encoding='cp932')
     t_meta = {b: a for b, a in zip(df_meta['id'], df_meta['name'])}
@@ -39,7 +42,8 @@ def main():
                     input_filename.relative_to(args.input))
     else:
         input_filename = args.input
-    df = pd.read_excel(input_filename, dtype=str)
+    df = pd.read_excel(input_filename)
+    mtime = datetime.fromtimestamp(Path(input_filename).stat().st_mtime)
 
     template = 'plotly_dark'
 
@@ -57,14 +61,27 @@ def main():
 
     divs = []
 
-    # age
+    logger.info('Summary')
+    divs.append('''
+    <div>
+    <p style="text-align:right;font-size:.8em;">
+    {}更新
+    </p>
+    <p>
+    件数：{}、骨折数：{}、手術数：{}
+    </p></div>
+    '''.format(mtime.strftime('%Y/%m/%d %H:%M'), len(df),
+               df[[c for c in df.columns if c.endswith('_fx')]].sum().sum(),
+               df[[c for c in df.columns if c.endswith('_sx')]].sum().sum()))
+
+    logger.info('Age')
     fig = plot_bar(count(df, 'hospital', 'age'))
     fig.update_layout(barmode='stack', title='年齢分布', template=template)
     fig.update_xaxes(title_text='年齢')
     fig.update_yaxes(title_text='Count')
     divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
-    # fracture
+    logger.info('Fracture')
     df_frac = df.copy()
     del df_frac['age']
     suffix = '_fx'
@@ -86,7 +103,7 @@ def main():
     fig.update_yaxes(title_text='Count')
     divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
-    # surgery
+    logger.info('Surgery')
     df_frac = df.copy()
     del df_frac['age']
     suffix = '_sx'
@@ -108,8 +125,16 @@ def main():
     fig.update_yaxes(title_text='Count')
     divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
-    # output html
-    from jinja2 import Environment, FileSystemLoader
+    logger.info('Total')
+    fig = px.pie(df, names='hospital')
+    fig.update_layout(barmode='stack', title='件数', template=template)
+    fig.update_layout(annotations=[
+        dict(text='total={}'.format(len(df)), x=.5, y=.5, showarrow=False)
+    ])
+    fig.update_traces(hole=.4, hoverinfo='label', textinfo='value')
+    divs.append(fig.to_html(full_html=False, include_plotlyjs=False))
+
+    logger.info('Output html')
     env = Environment(loader=FileSystemLoader(
         Path(__file__).parent / 'templates', encoding='utf8'))
     template = env.get_template('template.j2')

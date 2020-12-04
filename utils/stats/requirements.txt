@@ -1,0 +1,5 @@
+pandas
+logzero
+plotly
+xlrd
+jinja2
