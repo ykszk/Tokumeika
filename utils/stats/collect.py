@@ -14,8 +14,8 @@ def main():
         description='Collect stats and output dataframe in excel format.')
     parser.add_argument('indir', help='Input dirname', metavar='<input>')
     parser.add_argument('output',
-                        help='Output dirname: %(default)s',
-                        metavar='<dirname>')
+                        help='Output xlsx filename',
+                        metavar='<output>')
     parser.add_argument(
         '--meta',
         help='Translation file for metadata. default: %(default)s',

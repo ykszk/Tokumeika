@@ -14,9 +14,11 @@ def main():
     parser.add_argument(
         'input',
         help=
-        'Input filename. Latest file is selected when <input> is directory.',
+        'Input filename. Latest file is selected when <input> is a directory.',
         metavar='<input>')
-    parser.add_argument('output', help='Output filename.', metavar='<output>')
+    parser.add_argument('output',
+                        help='Output html filename.',
+                        metavar='<output>')
     parser.add_argument(
         '--meta',
         help='Translation file for metadata. default: %(default)s',
@@ -42,7 +44,7 @@ def main():
                     input_filename.relative_to(args.input))
     else:
         input_filename = args.input
-    df = pd.read_excel(input_filename)
+    df = pd.read_excel(input_filename, engine='openpyxl')
     mtime = datetime.fromtimestamp(Path(input_filename).stat().st_mtime)
 
     template = 'plotly_dark'
