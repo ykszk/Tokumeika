@@ -1,4 +1,5 @@
 *.html
+!templates/*.html
 *.csv
 *.xlsx
 *.js
