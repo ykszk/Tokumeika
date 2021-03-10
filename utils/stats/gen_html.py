@@ -139,7 +139,7 @@ def main():
     logger.info('Output html')
     env = Environment(loader=FileSystemLoader(
         Path(__file__).parent / 'templates', encoding='utf8'))
-    template = env.get_template('template.j2')
+    template = env.get_template('stats.html')
     html = template.render(body='\n'.join(divs))
     with open(args.output, 'w', encoding='utf8') as f:
         f.write(html)
