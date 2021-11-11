@@ -48,7 +48,8 @@ if len(config['prefix']) >= namedb.MAX_ID_LENGTH - 2:
     logger.fatal('prefix too long:' + config['prefix'])
     sys.exit(1)
 
-db = namedb.NameDB(config['private'], config['prefix'])
+db = namedb.NameDB(config['private'], config['prefix'],
+                   config.get('new_name_policy', 'fill'))
 
 dicom_dir = Path(config['dicom'])
 dicom_dir.mkdir(parents=True, exist_ok=True)
@@ -177,6 +178,22 @@ def exists():
     path = request.args.get('path')
     t = 'directory' if os.path.isdir(path) else 'file'
     return {'exists': os.path.exists(path), 'type': t}
+
+
+@app.route('/delete/<pid>', methods=['DELETE'])
+def delete(pid):
+    try:
+        logger.info('Delete %s from db', pid)
+        db.delete(pid)
+        db.to_csv(anon_table_filename)
+        logger.info('Delete %s from directories', pid)
+        for d in [dicom_dir, private_dir, exportdir]:
+            if (d / pid).exists():
+                shutil.rmtree(d / pid)
+        return {'success': True}
+    except Exception as e:
+        logger.error(str(e))
+        return {'success': False, 'reason': str(e)}
 
 
 @app.route('/dcmlist', methods=['GET'])

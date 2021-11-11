@@ -17,12 +17,13 @@ import {
   suffix_fracture,
   suffix_surgery,
 } from './anonymizer/MetaDialog';
+import { DeleteDialog } from './anonymizer/DeleteDialog';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { SortableType, Order, descendingComparator } from './SortableTable';
+
 interface PatientType {
   PatientID: string;
 }
-
 export interface EntryType {
   original: PatientType;
   anonymized: PatientType;
@@ -166,7 +167,7 @@ export function Browser() {
       });
   }, []);
 
-  useEffect(() => {
+  function reflesh() {
     fetch('rebuild_db').then(() => {
       fetch('query')
         .then((res) => res.json())
@@ -178,6 +179,10 @@ export function Browser() {
           setData(data.result);
         });
     });
+  }
+
+  useEffect(() => {
+    reflesh();
   }, []);
 
   function handleMetaData(data_index: number, meta: MetaType) {
@@ -271,6 +276,12 @@ export function Browser() {
             metaNameMap={metaNameMap}
           />
         </StyledTableCell>
+        <StyledTableCell>
+          <DeleteDialog
+            anonymous_id={e.anonymized.PatientID}
+            onDeletion={() => reflesh()}
+          />
+        </StyledTableCell>
       </StyledTableRow>
     </React.Fragment>
   ));
@@ -298,6 +309,7 @@ export function Browser() {
             {sortableHeaders}
             <StyledTableCell>Additional data</StyledTableCell>
             <StyledTableCell>Edit</StyledTableCell>
+            <StyledTableCell>Delete</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>{rows}</TableBody>

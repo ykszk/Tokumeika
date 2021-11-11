@@ -5,6 +5,7 @@ import json
 from . import utils
 
 from logging import basicConfig, getLogger, INFO
+
 basicConfig(
     level=INFO,
     format='[%(filename)s:%(lineno)d] %(asctime)s %(levelname)s :%(message)s')
@@ -14,9 +15,10 @@ MAX_ID_LENGTH = 8
 
 
 class NameDB(object):
-    def __init__(self, private_dir, prefix):
+    def __init__(self, private_dir, prefix, new_name_policy):
         self.private_dir = private_dir
         self.prefix = prefix
+        self.new_name_policy = new_name_policy
 
         self.name_dict = {}
         self._dict_lock = threading.Lock()
@@ -43,6 +45,12 @@ class NameDB(object):
     def add(self, old, new):
         self.name_dict[old] = new
 
+    def delete(self, value):
+        for k, v in self.name_dict.items():
+            if v == value:
+                del self.name_dict[k]
+                break
+
     def create_new_name(self):
         '''
         Use threading.Lock() to avoid duplicating names
@@ -58,7 +66,15 @@ class NameDB(object):
             existing.sort()
             new_number = 1
             if len(existing) > 0:
-                new_number = existing[-1] + 1
+                if self.new_name_policy == 'fill':  #  fill in the blank if exists
+                    existing = set(existing)
+                    while True:
+                        if new_number not in existing:
+                            break
+                        else:
+                            new_number += 1
+                else:  # increment from the last number
+                    new_number = existing[-1] + 1
             new_name = self.new_name_format.format(new_number)
             return new_name
 
