@@ -2,7 +2,7 @@ flask
 python-dotenv
 waitress
 
-pydicom
+pydicom==2.1.2
 pandas
 tqdm
 toml
