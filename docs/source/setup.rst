@@ -61,3 +61,14 @@ export
 
 
 「このアプリの機能のいくつかがwindows defenderファイアウォールでブロックされています」と表示された場合はキャンセルをクリック。
+
+
+最新版への更新とデータ引き継ぎ
+--------------------------------
+`配布サイト <https://github.com/yk-szk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードして展開する。
+古いバージョンのフォルダから以下のフォルダを新しいバージョンのフォルダにコピーする。
+
+* config
+* dicom
+* export
+* private
