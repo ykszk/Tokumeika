@@ -345,6 +345,11 @@ def rebuild_db():
     return {'success': True}
 
 
+def prepare(static_folder):
+    app.static_folder = static_folder
+    logger.info('start server: static_folder={}'.format(app.static_folder))
+
+
 def start(debug=True, port=5000, static_folder=None):
     if static_folder is not None:
         app.static_folder = static_folder

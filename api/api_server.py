@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import argparse
+from waitress import serve
 
 parser = argparse.ArgumentParser(description='Start flask server.')
 parser.add_argument('-c',
@@ -23,6 +24,7 @@ parser.add_argument('-d',
 args = parser.parse_args()
 
 from api import config_loader  # load config before api gets imported
+
 config_loader.load_configs(args.config)
 
 from api import api, config_loader
@@ -41,4 +43,5 @@ fileHandler.setFormatter(formatter)
 
 if __name__ == "__main__":
     api.add_logging_handler(fileHandler)
-    api.start(args.debug, args.port, args.static)
+    api.prepare(args.static)
+    serve(api.app, host='localhost', port=args.port)
