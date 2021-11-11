@@ -35,7 +35,7 @@ def main():
     items_dict = dict(df_items.values)
 
     rows = []
-    for fn in rootdir.glob('**/*.json'):
+    for fn in sorted(rootdir.glob('**/*.json')):
         with open(fn) as f:
             data = json.load(f)
         rfn = fn.relative_to(rootdir)
