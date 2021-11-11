@@ -2,4 +2,5 @@ dicom = 'dicom'
 private = 'private'
 export = 'export'
 prefix = 'ANON'
+new_name_policy = 'fill'
 step_size = 5
