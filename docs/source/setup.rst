@@ -4,7 +4,7 @@
 ダウンロード
 ------------
 
-`配布サイト <https://github.com/yk-szk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードする
+`配布サイト <https://github.com/ykszk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードする
 
 .. figure:: images/download.jpg
 
@@ -65,7 +65,7 @@ export
 
 最新版への更新とデータ引き継ぎ
 --------------------------------
-`配布サイト <https://github.com/yk-szk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードして展開する。
+`配布サイト <https://github.com/ykszk/Tokumeika/releases>`_ から最新版の ``tokumeika-manager-XXX-win32-x64.zip`` をダウンロードして展開する。
 古いバージョンのフォルダから以下のフォルダを新しいバージョンのフォルダにコピーする。
 
 * config

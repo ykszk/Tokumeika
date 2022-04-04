@@ -25,7 +25,7 @@ DICOM de-identification and management tool.
 ```
 
 ## Install
-Download latest version from the [releases](https://github.com/yk-szk/Tokumeika/releases) page.
+Download latest version from the [releases](https://github.com/ykszk/Tokumeika/releases) page.
 
 ## TODOs
 - Implement progress indication
