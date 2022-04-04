@@ -142,18 +142,18 @@
 </section>
 <section id="id3">
 <h2>ファイルのアップロード<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク"></a></h2>
-<p>匿名化プログラムのexportフォルダの中身を <code class="file docutils literal notranslate"><span class="pre">\\storage.cfdb.local\ユーザー名</span></code> に移動する。</p>
+<p>匿名化プログラムのexportフォルダの中身を <code class="file docutils literal notranslate"><span class="pre">\\storage.cfdb.local\ユーザー名</span></code> (もしくは <code class="file docutils literal notranslate"><span class="pre">\\10.10.10.10\ユーザー名</span></code> ) に移動する。</p>
 </section>
 <section id="storage-cfdb-local">
 <h2>ファイルエクスプローラで <code class="file docutils literal notranslate"><span class="pre">\\storage.cfdb.local</span></code> が開けない場合<a class="headerlink" href="#storage-cfdb-local" title="このヘッドラインへのパーマリンク"></a></h2>
 <p>コマンドプロンプトを開き以下を入力。</p>
-<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>net use \\172.30.0.13 /user:ユーザー名
+<div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>net use \\10.10.10.10 /user:ユーザー名
 </pre></div>
 </div>
 <p>パスワード入力を促されるのでパスワードを入力してエンター。
 成功すると <cite>コマンドは正常に終了しました。</cite> と表示される。</p>
-<p>上記コマンドを実行したあとにファイルエクスプローラで <code class="file docutils literal notranslate"><span class="pre">\\172.30.0.13\ユーザー名</span></code> にアクセスしファイルをアップロードする。
-(<code class="file docutils literal notranslate"><span class="pre">\\172.30.0.13\ユーザー名</span></code> と <code class="file docutils literal notranslate"><span class="pre">\\storage.cfdb.local\ユーザー名</span></code> は同じ場所にアクセスしている)</p>
+<p>上記コマンドを実行したあとにファイルエクスプローラで <code class="file docutils literal notranslate"><span class="pre">\\10.10.10.10\ユーザー名</span></code> にアクセスしファイルをアップロードする。
+(<code class="file docutils literal notranslate"><span class="pre">\\10.10.10.10\ユーザー名</span></code> と <code class="file docutils literal notranslate"><span class="pre">\\storage.cfdb.local\ユーザー名</span></code> は同じ場所にアクセスしている)</p>
 </section>
 </section>
 
