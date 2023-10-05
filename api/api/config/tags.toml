@@ -19,6 +19,7 @@ remove = [
   '0040,0244', # Performed Procedure Step Start Date
   '0040,0245', # Performed Procedure Step Start Time
   '0040,0253', # Performed Procedure Step ID
+  '0400,0561', # Original Attributes Sequence
 ]
 replace = [
   
